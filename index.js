@@ -14,15 +14,24 @@ function startGame(){
 }
 
 function renderGame(){
-    cardsEl.textContent = "Cards: " + cards
+    cardsEl.textContent = "Cards: "
+    for(let x = 0; x < cards.length; x+=1){
+        cardsEl.textContent += cards[x] + " "
+    }
     sumEl.textContent = "Sum: " + sum
     if(sum > 21){
         announcementEl.textContent = "Over 21. You lost!"
+        setTimeout(() => {
+           location.reload() 
+        }, 1000);
     } else if(sum < 21){
         announcementEl.textContent = "Want to draw another card?"
         stayButton.style.display = "block"
     } else{
         announcementEl.textContent = "Blackjack. You won!"
+        setTimeout(() => {
+            location.reload()
+        }, 5000);
     }
 }
 
@@ -42,5 +51,8 @@ function stay(){
     } else{
         announcementEl.textContent = "You: " + sum + " Bot: " + randomNumber + " TIE. Refresh the page."
     }
+    setTimeout(() => {
+        location.reload();
+    }, 5000);
 }
 
