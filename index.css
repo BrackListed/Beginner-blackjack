@@ -37,3 +37,7 @@ button:hover{
 #stay-button{
     display: none;
 }
+
+#draw-card{
+    display: none;
+}

@@ -1,5 +1,8 @@
-let firstCard = Math.floor(Math.random() * 11) + 1
-let secondCard = Math.floor(Math.random() * 11) + 1
+let cardSelection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+const firstIndex = Math.floor(Math.random() * cardSelection.length)
+const secondIndex = Math.floor(Math.random() * cardSelection.length) 
+let firstCard = cardSelection[firstIndex]
+let secondCard = cardSelection[secondIndex]
 let cards = [firstCard, secondCard]
 let cardsEl = document.getElementById("cards-el")
 let sumEl = document.getElementById("sum-el")
@@ -7,10 +10,18 @@ let announcementEl = document.getElementById("announcement-el")
 let drawCard = document.getElementById("draw-card")
 let sum = firstCard + secondCard
 let stayButton = document.getElementById("stay-button")
-const randomNumber = Math.floor(Math.random() * 21) + 1
+let botsum = 0
+let botCards = []
 
 function startGame(){
     renderGame()
+    drawCard.style.display = "block"
+    const thirdIndex = Math.floor(Math.random() * cardSelection.length) 
+    const fourthindex = Math.floor(Math.random() * cardSelection.length)
+    let botcardone = cardSelection[thirdIndex]
+    let botcardtwo =  cardSelection[fourthindex]
+    botSum = botcardone + botcardtwo
+    botCards = [botcardone, botcardtwo]
 }
 
 function renderGame(){
@@ -36,7 +47,8 @@ function renderGame(){
 }
 
 function newCard(){
-    let card = Math.floor(Math.random() * 11) + 1
+    const newIndex = Math.floor(Math.random() * cardSelection.length);
+    card = cardSelection[newIndex]
     cards.push(card)
     sum += card
     sumEl.textContent = "Sum: " + sum
@@ -44,15 +56,22 @@ function newCard(){
 }
 
 function stay(){
-    if(sum < randomNumber){
-        announcementEl.textContent = "You: " + sum + " Bot: " + randomNumber + " You lost."
-    } else if(sum > randomNumber){
-        announcementEl.textContent = "You: " + sum + " Bot: " + randomNumber + " You won!"
+    while(botSum < 17){
+    const botIndex = Math.floor(Math.random() * cardSelection.length);
+    botCard = cardSelection[botIndex]
+    botCards.push(botCard)
+    botSum += botCard
+}
+    if(botSum > 21){
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"}
+    else if(sum < botSum){
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You lost."
+    } else if(sum > botSum){
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You won!"
     } else{
-        announcementEl.textContent = "You: " + sum + " Bot: " + randomNumber + " TIE. Refresh the page."
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " TIE. Refresh the page."
     }
     setTimeout(() => {
         location.reload();
     }, 5000);
 }
-
