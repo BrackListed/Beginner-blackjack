@@ -1,4 +1,4 @@
-let cardSelection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+let cardSelection = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 const firstIndex = Math.floor(Math.random() * cardSelection.length)
 const secondIndex = Math.floor(Math.random() * cardSelection.length) 
 let firstCard = cardSelection[firstIndex]
@@ -12,6 +12,20 @@ let sum = firstCard + secondCard
 let stayButton = document.getElementById("stay-button")
 let botsum = 0
 let botCards = []
+let aceCounter = 0
+let botAcecounter = 0
+
+
+if(firstCard === 11){
+    aceCounter += 1
+} else if(secondCard === 11){
+    aceCounter += 1
+} 
+if(sum > 21 && aceCounter >= 1){
+    sum = sum - 10
+}
+
+
 
 function startGame(){
     renderGame()
@@ -22,6 +36,16 @@ function startGame(){
     let botcardtwo =  cardSelection[fourthindex]
     botSum = botcardone + botcardtwo
     botCards = [botcardone, botcardtwo]
+    if(botcardone === 11){
+        botAcecounter = 1
+    } else if(botcardtwo === 11){
+        botAcecounter = 1
+    }
+
+    if(botsum > 21 && botAcecounter === 1){
+        botsum = botsum - 10
+    }
+
 }
 
 function renderGame(){
@@ -52,6 +76,12 @@ function newCard(){
     cards.push(card)
     sum += card
     sumEl.textContent = "Sum: " + sum
+    if(card === 11){
+        aceCounter += 1
+    } 
+    if(sum > 21 && aceCounter >= 1){
+        sum = sum - 10
+    }
     renderGame()
 }
 
