@@ -82,6 +82,7 @@ if(firstCard.value === 11){
 } 
 if(sum > 21 && aceCounter >= 1){
     sum = sum - 10
+    aceCounter -= 1
 }
 
 
@@ -103,6 +104,7 @@ function startGame(){
 
     if(botSum > 21 && botAcecounter >= 1){
         botSum = botSum - 10
+        botAcecounter -= 1
     }
 
 }
@@ -143,6 +145,7 @@ function newCard(){
     } 
     if(sum > 21 && aceCounter >= 1){
         sum = sum - 10
+        aceCounter -= 1
     }
     renderGame()
 }
@@ -159,6 +162,7 @@ function stay(){
 
     if(botSum > 21 && botAcecounter >= 1){
         botSum = botSum - 10
+        botAcecounter -= 1
     }
 }
     if(botSum > 21 && isAlive === true){
