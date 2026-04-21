@@ -69,15 +69,15 @@ let announcementEl = document.getElementById("announcement-el")
 let drawCard = document.getElementById("draw-card")
 let sum = firstCard.value + secondCard.value
 let stayButton = document.getElementById("stay-button")
-let botsum = 0
+let botSum = 0
 let botCards = []
 let aceCounter = 0
 let botAcecounter = 0
+let isAlive  =  false
 
-
-if(firstCard === 11){
+if(firstCard.value === 11){
     aceCounter += 1
-} else if(secondCard === 11){
+} else if(secondCard.value === 11){
     aceCounter += 1
 } 
 if(sum > 21 && aceCounter >= 1){
@@ -86,6 +86,7 @@ if(sum > 21 && aceCounter >= 1){
 
 
 function startGame(){
+    isAlive = true
     renderGame()
     drawCard.style.display = "block"
     const thirdIndex = Math.floor(Math.random() * cardSelection.length) 
@@ -95,13 +96,13 @@ function startGame(){
     botSum = botcardone + botcardtwo
     botCards = [botcardone, botcardtwo]
     if(botcardone === 11){
-        botAcecounter = 1
+        botAcecounter += 1
     } else if(botcardtwo === 11){
-        botAcecounter = 1
+        botAcecounter += 1
     }
 
-    if(botsum > 21 && botAcecounter === 1){
-        botsum = botsum - 10
+    if(botSum > 21 && botAcecounter >= 1){
+        botSum = botSum - 10
     }
 
 }
@@ -119,6 +120,7 @@ function renderGame(){
         setTimeout(() => {
            location.reload() 
         }, 1000);
+        isAlive = false
     } else if(sum < 21){
         announcementEl.textContent = "Want to draw another card?"
         stayButton.style.display = "block"
@@ -136,7 +138,7 @@ function newCard(){
     cards.push(card)
     sum += card.value
     sumEl.textContent = "Sum: " + sum
-    if(card === 11){
+    if(card.value === 11){
         aceCounter += 1
     } 
     if(sum > 21 && aceCounter >= 1){
@@ -151,16 +153,25 @@ function stay(){
     botCard = cardSelection[botIndex].value
     botCards.push(botCard)
     botSum += botCard
+    if(botCard === 11){
+        botAcecounter += 1
+    }
+
+    if(botSum > 21 && botAcecounter >= 1){
+        botSum = botSum - 10
+    }
 }
-    if(botSum > 21){
+    if(botSum > 21 && isAlive === true){
         alert("You: " + sum + " Bot: " + botSum + " Bot busted. You won!")
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"}
     else if(sum < botSum){
         alert("You: " + sum + " Bot: " + botSum + " You lost.")
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You lost."
-    } else if(sum > botSum){
+    } else if(sum > botSum && isAlive === true){
         alert("You: " + sum + " Bot: " + botSum + " You won!")
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You won!"
+    } else if(sum > botSum && isAlive === false){
+        alert("You already busted though???")
     } else{
         alert("You: " + sum + " Bot: " + botSum + " TIE. Refresh the page.")
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " TIE. Refresh the page."
@@ -170,4 +181,3 @@ function stay(){
     }, 5000);
 
 }
-
