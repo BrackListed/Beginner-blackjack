@@ -58,8 +58,8 @@ let cardSelection = [
 ]
 
 
-const firstIndex = Math.floor(Math.random() * cardSelection.length)
-const secondIndex = Math.floor(Math.random() * cardSelection.length) 
+let firstIndex = Math.floor(Math.random() * cardSelection.length)
+let secondIndex = Math.floor(Math.random() * cardSelection.length) 
 let firstCard = cardSelection[firstIndex]
 let secondCard = cardSelection[secondIndex]
 let cards = [firstCard, secondCard]
@@ -74,6 +74,7 @@ let botCards = []
 let aceCounter = 0
 let botAcecounter = 0
 let isAlive  =  false
+let playerStats = document.getElementById('player-stats')
 
 if(firstCard.value === 11){
     aceCounter += 1
@@ -85,8 +86,26 @@ if(sum > 21 && aceCounter >= 1){
     aceCounter -= 1
 }
 
+let winCount = parseInt(localStorage.getItem("win-storage")) || 0
+let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
+
+
+
+function updateStats(){
+    localStorage.setItem("win-storage", winCount)
+    localStorage.setItem("loss-storage", lossCount)
+}
+
+
+
+if(winCount === null && lossCount === null){
+    playerStats.style.display = "none"
+} else{
+    playerStats.style.display = "block"
+}
 
 function startGame(){
+    playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
     isAlive = true
     renderGame()
     drawCard.style.display = "block"
@@ -109,6 +128,20 @@ function startGame(){
 
 }
 
+function reloadGame(){
+    stayButton.style.display = "none"
+    drawCard.style.display = "none"
+    cardsEl.textContent = "Cards: "
+    firstIndex = Math.floor(Math.random() * cardSelection.length)
+    secondIndex = Math.floor(Math.random() * cardSelection.length) 
+    let firstCard = cardSelection[firstIndex]
+    let secondCard = cardSelection[secondIndex]
+    sum = firstCard.value + secondCard.value
+    cards = [firstCard, secondCard]
+
+
+}
+
 function renderGame(){
     cardsEl.textContent = "Cards: "
     for(let x = 0; x < cards.length; x+=1){
@@ -119,18 +152,17 @@ function renderGame(){
     sumEl.textContent = "Sum: " + sum
     if(sum > 21){
         announcementEl.textContent = "Over 21. You lost!"
-        setTimeout(() => {
-           location.reload() 
-        }, 1000);
-        isAlive = false
+        lossCount += 1
+        reloadGame()
+        updateStats()
     } else if(sum < 21){
         announcementEl.textContent = "Want to draw another card?"
         stayButton.style.display = "block"
     } else{
+        winCount += 1
         announcementEl.textContent = "Blackjack. You won!"
-        setTimeout(() => {
-            location.reload()
-        }, 5000);
+        reloadGame()
+        updateStats()
     }
 }
 
@@ -166,22 +198,26 @@ function stay(){
     }
 }
     if(botSum > 21 && isAlive === true){
-        alert("You: " + sum + " Bot: " + botSum + " Bot busted. You won!")
-        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"}
-    else if(sum < botSum){
-        alert("You: " + sum + " Bot: " + botSum + " You lost.")
+        winCount += 1
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"
+        reloadGame()
+        updateStats()
+    } else if(sum < botSum){
+        lossCount += 1
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You lost."
+        reloadGame()
+        updateStats()
     } else if(sum > botSum && isAlive === true){
-        alert("You: " + sum + " Bot: " + botSum + " You won!")
+        winCount += 1
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You won!"
+        reloadGame()
+        updateStats()
     } else if(sum > botSum && isAlive === false){
         alert("You already busted though???")
     } else{
-        alert("You: " + sum + " Bot: " + botSum + " TIE. Refresh the page.")
-        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " TIE. Refresh the page."
+        announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " TIE. "
+        reloadGame()
+
     }
-    setTimeout(() => {
-        location.reload();
-    }, 5000);
 
 }
