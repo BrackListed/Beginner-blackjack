@@ -75,6 +75,11 @@ let aceCounter = 0
 let botAcecounter = 0
 let isAlive  =  false
 let playerStats = document.getElementById('player-stats')
+let playerBalance = parseInt(localStorage.getItem("balance-storage")) || 0
+let balanceEl = document.getElementById("balance-element")
+let betEl = document.getElementById("bet-el")
+balanceEl.textContent = "Balance: " + playerBalance
+betEl.readOnly = false
 
 if(firstCard.value === 11){
     aceCounter += 1
@@ -105,6 +110,13 @@ if(winCount === null && lossCount === null){
 }
 
 function startGame(){
+    if(betEl.value === "" || Number(betEl.value) === 0){
+        alert("Enter a proper bet greater than 0 first!")
+    } else if(playerBalance === 0){
+        alert("Increase your balance! You cannot bet with 0.")
+    } else if(playerBalance < betEl.value){
+        alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
+    } else{
     playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
     isAlive = true
     renderGame()
@@ -125,7 +137,8 @@ function startGame(){
         botSum = botSum - 10
         botAcecounter -= 1
     }
-
+    balanceEl.textContent = "Balance: " + playerBalance
+    }
 }
 
 function reloadGame(){
@@ -155,15 +168,23 @@ function renderGame(){
         lossCount += 1
         reloadGame()
         updateStats()
+        playerBalance -= betEl.value 
+        updatebalance()
+        betEl.readOnly = false
     } else if(sum < 21){
         announcementEl.textContent = "Want to draw another card?"
         stayButton.style.display = "block"
+        
     } else{
         winCount += 1
         announcementEl.textContent = "Blackjack. You won!"
         reloadGame()
         updateStats()
+        playerBalance += betEl.value * 2
+        updatebalance()
+        betEl.readOnly = false
     }
+    betEl.readOnly = true
 }
 
 function newCard(){
@@ -202,16 +223,25 @@ function stay(){
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"
         reloadGame()
         updateStats()
+        playerBalance += betEl.value * 2
+        updatebalance()
+        betEl.readOnly = false
     } else if(sum < botSum){
         lossCount += 1
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You lost."
         reloadGame()
         updateStats()
+        playerBalance -= betEl.value 
+        updatebalance()
+        betEl.readOnly = false
     } else if(sum > botSum && isAlive === true){
         winCount += 1
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You won!"
         reloadGame()
         updateStats()
+        playerBalance += betEl.value * 2
+        updatebalance()
+        betEl.readOnly = false
     } else if(sum > botSum && isAlive === false){
         alert("You already busted though???")
     } else{
@@ -220,4 +250,30 @@ function stay(){
 
     }
 
+}
+
+//they can click to increase balance, balance will save, if they lose subtract balance to their bet, if they win double their bet and add to their balance
+function increasebalance(){
+    playerBalance += 10
+    updatebalance()
+}
+
+function updatebalance(){
+    localStorage.setItem("balance-storage", playerBalance)
+    balanceEl.textContent = "Balance: " + playerBalance
+}
+
+function plusOne(){
+    playerBalance += 1
+    updatebalance()
+}
+
+function plusFive(){
+    playerBalance += 5
+    updatebalance()
+}
+
+function plusTen(){
+    playerBalance += 10
+    updatebalance()
 }

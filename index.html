@@ -9,6 +9,22 @@
 
 <body>
     <h1>SIMPLE BLACKJACK GAME</h1>
+    <div class = "money-system">
+        <div class = "balance-container">
+            <button onclick = "increasebalance()" id = "balance-increase">Click to increase balance</button>
+            <div class = "balance-multiplier">
+                <button id = "plus-one" onclick = "plusOne()">+1</button>
+                <button id = "plus-five" onclick = "plusFive()">+5</button>
+                <button id = "plus-10" onclick = "plusTen()">+10</button>
+            </div>
+        </div>
+        <div class = "betting-system">
+            <p id = "balance-element">Balance: </p>
+            <label for = "bet-el"> Bet: 
+                <input type = "text" id = "bet-el">
+            </label>
+        </div>
+    </div>
     <p id = "player-stats">Wins:  Losses: </p>
     <p id = "announcement-el">Try your luck!</p>
     <p id = "cards-el">Cards: </p>
@@ -16,7 +32,6 @@
     <button onclick = "startGame()">Start</button>
     <button id = "stay-button" onclick = "stay()">STAY</button>
     <button onclick = "newCard()" id = "draw-card">Draw a new card</button>
-
     <script src = "index.js"></script>
 </body>
 </html>
