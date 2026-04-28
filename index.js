@@ -110,7 +110,7 @@ if(winCount === null && lossCount === null){
 }
 
 function startGame(){
-    if(betEl.value === "" || Number(betEl.value) === 0){
+    if(betEl.value === ""){
         alert("Enter a proper bet greater than 0 first!")
     } else if(playerBalance === 0){
         alert("Increase your balance! You cannot bet with 0.")
