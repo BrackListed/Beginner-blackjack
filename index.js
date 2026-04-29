@@ -62,12 +62,12 @@ let firstIndex = Math.floor(Math.random() * cardSelection.length)
 let secondIndex = Math.floor(Math.random() * cardSelection.length) 
 let firstCard = cardSelection[firstIndex]
 let secondCard = cardSelection[secondIndex]
-let cards = [firstCard, secondCard]
+let cards = JSON.parse(localStorage.getItem("card-storage")) || [firstCard, secondCard]
+let sum = parseInt(localStorage.getItem("sum-storage")) || cards[0].value + cards[1].value
 let cardsEl = document.getElementById("cards-el")
 let sumEl = document.getElementById("sum-el")
 let announcementEl = document.getElementById("announcement-el")
 let drawCard = document.getElementById("draw-card")
-let sum = firstCard.value + secondCard.value
 let stayButton = document.getElementById("stay-button")
 let botSum = 0
 let botCards = []
@@ -81,19 +81,10 @@ let betEl = document.getElementById("bet-el")
 balanceEl.textContent = "Balance: " + playerBalance
 betEl.readOnly = false
 
-if(firstCard.value === 11){
-    aceCounter += 1
-} else if(secondCard.value === 11){
-    aceCounter += 1
-} 
-if(sum > 21 && aceCounter >= 1){
-    sum = sum - 10
-    aceCounter -= 1
-}
+
 
 let winCount = parseInt(localStorage.getItem("win-storage")) || 0
 let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
-
 
 
 function updateStats(){
@@ -149,13 +140,20 @@ function reloadGame(){
     secondIndex = Math.floor(Math.random() * cardSelection.length) 
     let firstCard = cardSelection[firstIndex]
     let secondCard = cardSelection[secondIndex]
-    sum = firstCard.value + secondCard.value
     cards = [firstCard, secondCard]
-
-
+    sum = cards[0].value + cards[1].value
 }
 
+
 function renderGame(){
+    if(firstCard.value === 11){
+        aceCounter += 1
+    } else if(secondCard.value === 11){
+        aceCounter += 1
+    } if(sum > 21 && aceCounter >= 1){
+        sum = sum - 10
+        aceCounter -= 1
+    }
     cardsEl.textContent = "Cards: "
     for(let x = 0; x < cards.length; x+=1){
         let cardImg = document.createElement("img")
@@ -185,6 +183,8 @@ function renderGame(){
         betEl.readOnly = false
     }
     betEl.readOnly = true
+    localStorage.setItem("card-storage", JSON.stringify(cards))
+    localStorage.setItem("sum-storage", sum)
 }
 
 function newCard(){
@@ -192,7 +192,6 @@ function newCard(){
     card = cardSelection[newIndex]
     cards.push(card)
     sum += card.value
-    sumEl.textContent = "Sum: " + sum
     if(card.value === 11){
         aceCounter += 1
     } 
@@ -252,7 +251,8 @@ function stay(){
 
 }
 
-//they can click to increase balance, balance will save, if they lose subtract balance to their bet, if they win double their bet and add to their balance
+
+
 function increasebalance(){
     playerBalance += 10
     updatebalance()
