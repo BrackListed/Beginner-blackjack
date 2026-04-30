@@ -167,7 +167,7 @@ function renderGame(){
         lossCount += 1
         reloadGame()
         updateStats()
-        playerBalance -= betEl.value 
+        playerBalance -= playerBet
         updatebalance()
         betEl.readOnly = false
     } else if(sum < 21){
@@ -179,7 +179,7 @@ function renderGame(){
         announcementEl.textContent = "Blackjack. You won!"
         reloadGame()
         updateStats()
-        playerBalance += betEl.value * 2
+        playerBalance += playerBet * 2
         updatebalance()
         betEl.readOnly = false
     }
@@ -223,7 +223,7 @@ function stay(){
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " Bot busted. You won!"
         reloadGame()
         updateStats()
-        playerBalance += betEl.value * 2
+        playerBalance += playerBet * 2
         updatebalance()
         betEl.readOnly = false
     } else if(sum < botSum){
@@ -231,7 +231,7 @@ function stay(){
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You lost."
         reloadGame()
         updateStats()
-        playerBalance -= betEl.value 
+        playerBalance -= playerBet 
         updatebalance()
         betEl.readOnly = false
     } else if(sum > botSum && isAlive === true){
@@ -239,7 +239,7 @@ function stay(){
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " You won!"
         reloadGame()
         updateStats()
-        playerBalance += betEl.value * 2
+        playerBalance += playerBet * 2
         updatebalance()
         betEl.readOnly = false
     } else if(sum > botSum && isAlive === false){
