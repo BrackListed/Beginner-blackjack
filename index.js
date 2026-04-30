@@ -81,11 +81,10 @@ let betEl = document.getElementById("bet-el")
 let betReminder = document.getElementById("bet-reminder")
 balanceEl.textContent = "Balance: " + playerBalance
 betEl.readOnly = false
-let playerBet = parseInt(localStorage.getItem("player-bet")) || 0
-
 let winCount = parseInt(localStorage.getItem("win-storage")) || 0
 let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
-
+let playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
+console.log(playerBet)
 
 function updateStats(){
     localStorage.setItem("win-storage", winCount)
@@ -94,7 +93,6 @@ function updateStats(){
 
 function storeBet(){
     localStorage.setItem("player-bet", betEl.value)
-    betReminder.textContent = "Player Bet: " + playerBet
 }
 
 if(winCount === null && lossCount === null){
@@ -110,8 +108,7 @@ function startGame(){
         alert("Increase your balance! You cannot bet with 0.")
     } else if(playerBalance < betEl.value){
         alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
-    } else if(playerBalance > betEl.value){
-        betReminder.textContent = "Your Bet: " + playerBet
+    } else if(playerBalance >= betEl.value){
         playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
         isAlive = true
         renderGame()
@@ -152,6 +149,11 @@ function reloadGame(){
 
 
 function renderGame(){
+    playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
+    betReminder.textContent = "Player Bet: " + playerBet
+    console.log(betEl.value)
+    console.log(playerBet)
+    storeBet()
     betEl.readOnly = true
     if(firstCard.value === 11){
         aceCounter += 1
@@ -189,7 +191,6 @@ function renderGame(){
         updatebalance()
         betEl.readOnly = false
     }
-    storeBet()
     localStorage.setItem("card-storage", JSON.stringify(cards))
     localStorage.setItem("sum-storage", sum)
 }
@@ -255,7 +256,6 @@ function stay(){
         reloadGame()
 
     }
-    storeBet()
 
 }
 
