@@ -78,10 +78,10 @@ let playerStats = document.getElementById('player-stats')
 let playerBalance = parseInt(localStorage.getItem("balance-storage")) || 0
 let balanceEl = document.getElementById("balance-element")
 let betEl = document.getElementById("bet-el")
+let betReminder = document.getElementById("bet-reminder")
 balanceEl.textContent = "Balance: " + playerBalance
 betEl.readOnly = false
-
-
+let playerBet = parseInt(localStorage.getItem("player-bet")) || 0
 
 let winCount = parseInt(localStorage.getItem("win-storage")) || 0
 let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
@@ -91,7 +91,6 @@ function updateStats(){
     localStorage.setItem("win-storage", winCount)
     localStorage.setItem("loss-storage", lossCount)
 }
-
 
 
 if(winCount === null && lossCount === null){
@@ -108,26 +107,28 @@ function startGame(){
     } else if(playerBalance < betEl.value){
         alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
     } else{
-    playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
-    isAlive = true
-    renderGame()
-    drawCard.style.display = "block"
-    const thirdIndex = Math.floor(Math.random() * cardSelection.length) 
-    const fourthindex = Math.floor(Math.random() * cardSelection.length)
-    let botcardone = cardSelection[thirdIndex].value
-    let botcardtwo =  cardSelection[fourthindex].value
-    botSum = botcardone + botcardtwo
-    botCards = [botcardone, botcardtwo]
-    if(botcardone === 11){
-        botAcecounter += 1
-    } else if(botcardtwo === 11){
-        botAcecounter += 1
-    }
+        betReminder.textContent = "Your Bet: " + playerBet
+        localStorage.setItem("player-bet", betEl.value)
+        playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
+        isAlive = true
+        renderGame()
+        drawCard.style.display = "block"
+        const thirdIndex = Math.floor(Math.random() * cardSelection.length) 
+        const fourthindex = Math.floor(Math.random() * cardSelection.length)
+        let botcardone = cardSelection[thirdIndex].value
+        let botcardtwo =  cardSelection[fourthindex].value
+        botSum = botcardone + botcardtwo
+        botCards = [botcardone, botcardtwo]
+        if(botcardone === 11){
+            botAcecounter += 1
+        } else if(botcardtwo === 11){
+            botAcecounter += 1
+        }
 
-    if(botSum > 21 && botAcecounter >= 1){
-        botSum = botSum - 10
-        botAcecounter -= 1
-    }
+        if(botSum > 21 && botAcecounter >= 1){
+            botSum = botSum - 10
+            botAcecounter -= 1
+        }
     balanceEl.textContent = "Balance: " + playerBalance
     }
 }
