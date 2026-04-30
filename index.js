@@ -92,6 +92,10 @@ function updateStats(){
     localStorage.setItem("loss-storage", lossCount)
 }
 
+function storeBet(){
+    localStorage.setItem("player-bet", betEl.value)
+    betReminder.textContent = "Player Bet: " + playerBet
+}
 
 if(winCount === null && lossCount === null){
     playerStats.style.display = "none"
@@ -100,15 +104,14 @@ if(winCount === null && lossCount === null){
 }
 
 function startGame(){
-    if(betEl.value === ""){
+    if(betEl.value === "0"){
         alert("Enter a proper bet greater than 0 first!")
-    } else if(playerBalance === 0){
+    } else if(betEl.value === ""){
         alert("Increase your balance! You cannot bet with 0.")
     } else if(playerBalance < betEl.value){
         alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
-    } else{
+    } else if(playerBalance > betEl.value){
         betReminder.textContent = "Your Bet: " + playerBet
-        localStorage.setItem("player-bet", betEl.value)
         playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
         isAlive = true
         renderGame()
@@ -130,6 +133,8 @@ function startGame(){
             botAcecounter -= 1
         }
     balanceEl.textContent = "Balance: " + playerBalance
+    } else{
+        alert("Are you sure you've only typed numbers?")
     }
 }
 
@@ -184,6 +189,7 @@ function renderGame(){
         updatebalance()
         betEl.readOnly = false
     }
+    storeBet()
     localStorage.setItem("card-storage", JSON.stringify(cards))
     localStorage.setItem("sum-storage", sum)
 }
@@ -249,6 +255,7 @@ function stay(){
         reloadGame()
 
     }
+    storeBet()
 
 }
 
