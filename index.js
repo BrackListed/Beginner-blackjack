@@ -85,16 +85,12 @@ let winCount = parseInt(localStorage.getItem("win-storage")) || 0
 let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
 let playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
 let placedBet = JSON.parse(localStorage.getItem("bet-checker")) || false
-console.log(playerBet)
-console.log(placedBet)
+betReminder.textContent = "Player Bet: " + playerBet
 function updateStats(){
     localStorage.setItem("win-storage", winCount)
     localStorage.setItem("loss-storage", lossCount)
 }
 
-function storeBet(){
-    localStorage.setItem("player-bet", betEl.value)
-}
 
 if(winCount === null && lossCount === null){
     playerStats.style.display = "none"
@@ -115,18 +111,18 @@ betCondition()
 
 function betChecker(){
    localStorage.setItem("bet-checker", placedBet)
-   console.log(placedBet)
 }
 
 function startGame(){
-    playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
-    if(placedBet === "0"){
+    playerBet = parseInt(betEl.value) || parseInt(localStorage.getItem("player-bet"))
+    storeBet()
+    if(playerBet === "0"){
         alert("Enter a proper bet greater than 0 first!")
-    } else if(placedBet === ""){
+    } else if(playerBet === ""){
         alert("Increase your balance! You cannot bet with 0.")
-    } else if(playerBalance < placedBet){
+    } else if(playerBalance < playerBet){
         alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
-    } else if(playerBalance >= placedBet){
+    } else if(playerBalance >= playerBet){
         placedBet = true
         betCondition()
         playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
@@ -160,7 +156,7 @@ function reloadGame(){
     placedBet = false
     stayButton.style.display = "none"
     drawCard.style.display = "none"
-    cardsEl.textContent = "Cards: "
+    cardsEl.innerHTML = "Cards: "
     firstIndex = Math.floor(Math.random() * cardSelection.length)
     secondIndex = Math.floor(Math.random() * cardSelection.length) 
     let firstCard = cardSelection[firstIndex]
@@ -171,13 +167,14 @@ function reloadGame(){
     betCondition()
 }
 
+function storeBet(){
+    localStorage.setItem("player-bet", playerBet)
+}
+
 
 function renderGame(){
     placedBet = true
     betReminder.textContent = "Player Bet: " + playerBet
-    console.log(betEl.value)
-    console.log(playerBet)
-    storeBet()
     betEl.readOnly = true
     if(firstCard.value === 11){
         aceCounter += 1
@@ -239,8 +236,6 @@ function newCard(){
 }
 
 function stay(){
-    console.log(playerBet)
-    console.log(typeof playerBet)
     while(botSum < 17){
     const botIndex = Math.floor(Math.random() * cardSelection.length);
     botCard = cardSelection[botIndex].value
