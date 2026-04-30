@@ -84,8 +84,9 @@ betEl.readOnly = false
 let winCount = parseInt(localStorage.getItem("win-storage")) || 0
 let lossCount = parseInt(localStorage.getItem("loss-storage")) || 0
 let playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
+let placedBet = JSON.parse(localStorage.getItem("bet-checker")) || false
 console.log(playerBet)
-
+console.log(placedBet)
 function updateStats(){
     localStorage.setItem("win-storage", winCount)
     localStorage.setItem("loss-storage", lossCount)
@@ -101,14 +102,33 @@ if(winCount === null && lossCount === null){
     playerStats.style.display = "block"
 }
 
+
+function betCondition(){
+    if(placedBet === false){
+        betEl.readOnly = false
+    } else{
+        betEl.readOnly = true
+    }
+}
+
+betCondition()
+
+function betChecker(){
+   localStorage.setItem("bet-checker", placedBet)
+   console.log(placedBet)
+}
+
 function startGame(){
-    if(betEl.value === "0"){
+    playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
+    if(placedBet === "0"){
         alert("Enter a proper bet greater than 0 first!")
-    } else if(betEl.value === ""){
+    } else if(placedBet === ""){
         alert("Increase your balance! You cannot bet with 0.")
-    } else if(playerBalance < betEl.value){
+    } else if(playerBalance < placedBet){
         alert("Increase your balance first! Your Balance: " + playerBalance + " Needed Balance: " + betEl.value)
-    } else if(playerBalance >= betEl.value){
+    } else if(playerBalance >= placedBet){
+        placedBet = true
+        betCondition()
         playerStats.textContent = "Wins: " + winCount + " Loss:" + lossCount
         isAlive = true
         renderGame()
@@ -129,6 +149,7 @@ function startGame(){
             botSum = botSum - 10
             botAcecounter -= 1
         }
+        betChecker()
     balanceEl.textContent = "Balance: " + playerBalance
     } else{
         alert("Are you sure you've only typed numbers?")
@@ -136,6 +157,7 @@ function startGame(){
 }
 
 function reloadGame(){
+    placedBet = false
     stayButton.style.display = "none"
     drawCard.style.display = "none"
     cardsEl.textContent = "Cards: "
@@ -145,11 +167,13 @@ function reloadGame(){
     let secondCard = cardSelection[secondIndex]
     cards = [firstCard, secondCard]
     sum = cards[0].value + cards[1].value
+    betChecker()
+    betCondition()
 }
 
 
 function renderGame(){
-    playerBet = parseInt(localStorage.getItem("player-bet")) || betEl.value
+    placedBet = true
     betReminder.textContent = "Player Bet: " + playerBet
     console.log(betEl.value)
     console.log(playerBet)
@@ -177,7 +201,8 @@ function renderGame(){
         updateStats()
         playerBalance -= playerBet
         updatebalance()
-        betEl.readOnly = false
+        placedBet = false
+        // betEl.readOnly = false
     } else if(sum < 21){
         announcementEl.textContent = "Want to draw another card?"
         stayButton.style.display = "block"
@@ -189,8 +214,11 @@ function renderGame(){
         updateStats()
         playerBalance += playerBet * 2
         updatebalance()
-        betEl.readOnly = false
+        placedBet = false
+        // betEl.readOnly = false
     }
+    betChecker()
+    betCondition()
     localStorage.setItem("card-storage", JSON.stringify(cards))
     localStorage.setItem("sum-storage", sum)
 }
@@ -211,6 +239,8 @@ function newCard(){
 }
 
 function stay(){
+    console.log(playerBet)
+    console.log(typeof playerBet)
     while(botSum < 17){
     const botIndex = Math.floor(Math.random() * cardSelection.length);
     botCard = cardSelection[botIndex].value
@@ -232,6 +262,7 @@ function stay(){
         updateStats()
         playerBalance += playerBet * 2
         updatebalance()
+        placedBet = false
         betEl.readOnly = false
     } else if(sum < botSum){
         lossCount += 1
@@ -240,6 +271,7 @@ function stay(){
         updateStats()
         playerBalance -= playerBet 
         updatebalance()
+        placedBet = false
         betEl.readOnly = false
     } else if(sum > botSum && isAlive === true){
         winCount += 1
@@ -248,14 +280,18 @@ function stay(){
         updateStats()
         playerBalance += playerBet * 2
         updatebalance()
+        placedBet = false
         betEl.readOnly = false
     } else if(sum > botSum && isAlive === false){
         alert("You already busted though???")
     } else{
+        placedBet = false
         announcementEl.textContent = "You: " + sum + " Bot: " + botSum + " TIE. "
         reloadGame()
 
     }
+    betChecker()
+    betCondition()
 
 }
 
