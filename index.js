@@ -147,6 +147,7 @@ function reloadGame(){
 
 
 function renderGame(){
+    betEl.readOnly = true
     if(firstCard.value === 11){
         aceCounter += 1
     } else if(secondCard.value === 11){
@@ -183,7 +184,6 @@ function renderGame(){
         updatebalance()
         betEl.readOnly = false
     }
-    betEl.readOnly = true
     localStorage.setItem("card-storage", JSON.stringify(cards))
     localStorage.setItem("sum-storage", sum)
 }
