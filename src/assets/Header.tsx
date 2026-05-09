@@ -17,7 +17,7 @@ export function Header(){
         <div id = "right" className="flex flex-col gap-2">
             <span>Balance: </span>
             <label htmlFor = "bet-input">Bet: 
-                <input id = "bet-input" type = "text" className="outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1"></input>
+                <input id = "bet-input" type = "text" className="mx-2 outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1 hover:cursor-pointer transition-transform hover:scale-105"></input>
             </label>
             <span>Player Bet: </span>
         </div>
