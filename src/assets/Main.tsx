@@ -7,6 +7,12 @@ export function Main() {
         value: number;
         img: string;
     }
+
+    type cards = {
+        name: string;
+        value: number;
+        img: string;
+    }
     let cardSelection: Card[] = [
     {name: "clubs_2", value: 2, img: "./playing-cards/clubs_2.png"},
     {name: "clubs_3", value: 3, img: "./playing-cards/clubs_3.png"},
@@ -63,9 +69,10 @@ export function Main() {
 ]
 
     const [gameStarted, setGameStarted] = useState(false)
+     {/* Dont forget to set gameStarted to false once the player has won/lost */}
     let firstCard = null
     let secondCard = null
- const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
+const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
   return (
     <div className="flex flex-col gap-3 text-center items-center">
         <span>Click Start!</span>
@@ -77,20 +84,30 @@ export function Main() {
         <div id = 'sum-container'>Sum: </div>
         {gameStarted === false && <Buttons onClick = {() => {startGame(); setGameStarted(true)}}>Start</Buttons> }
         {gameStarted && <div className="flex flex-col gap-2 items-center">
-            <Buttons>Hit</Buttons>
-            <Buttons>Stand</Buttons>
+            <Buttons onClick = {() => Hit()}>Hit</Buttons>
+            <Buttons onClick = {() => Stand()}>Stand</Buttons>
             </div>}
     </div>
   )
 
   function startGame(){
-    let firstIndex = Math.floor(Math.random() * cardSelection.length)
-    let newFirst = cardSelection[firstIndex]
-    let secondIndex = Math.floor(Math.random() * cardSelection.length)
-    let newSecond = cardSelection[secondIndex]
-    setCard([newFirst, newSecond])
-    localStorage.setItem("card-storage", JSON.stringify([newFirst, newSecond]))
-}
+        let firstIndex = Math.floor(Math.random() * cardSelection.length)
+        let newFirst = cardSelection[firstIndex]
+        let secondIndex = Math.floor(Math.random() * cardSelection.length)
+        let newSecond = cardSelection[secondIndex]
+        setCard([newFirst, newSecond])
+        localStorage.setItem("card-storage", JSON.stringify([newFirst, newSecond]))
+    }
+
+    function Hit() {
+        let newIndex = Math.floor(Math.random() * cardSelection.length)
+        let newCard = cardSelection[newIndex]
+        setCard([...cards, newCard])
+    }
+
+    function Stand() {
+        console.log('Hello')
+    }
 }
 
 
