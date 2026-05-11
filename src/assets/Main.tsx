@@ -66,7 +66,6 @@ export function Main() {
     let firstCard = null
     let secondCard = null
  const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
-
   return (
     <div className="flex flex-col gap-3 text-center items-center">
         <span>Click Start!</span>
@@ -76,21 +75,22 @@ export function Main() {
         ))}
         </div>
         <div id = 'sum-container'>Sum: </div>
-        <Buttons onClick = {() => startGame()}>Start</Buttons>
+        {gameStarted === false && <Buttons onClick = {() => {startGame(); setGameStarted(true)}}>Start</Buttons> }
+        {gameStarted && <div className="flex flex-col gap-2 items-center">
+            <Buttons>Hit</Buttons>
+            <Buttons>Stand</Buttons>
+            </div>}
     </div>
   )
 
   function startGame(){
-    console.log("Hiya!!")
     let firstIndex = Math.floor(Math.random() * cardSelection.length)
     let newFirst = cardSelection[firstIndex]
     let secondIndex = Math.floor(Math.random() * cardSelection.length)
     let newSecond = cardSelection[secondIndex]
     setCard([newFirst, newSecond])
     localStorage.setItem("card-storage", JSON.stringify([newFirst, newSecond]))
-    setGameStarted(true)
 }
-
 }
 
 

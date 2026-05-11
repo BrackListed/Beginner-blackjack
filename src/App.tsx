@@ -8,9 +8,9 @@ export default function App (){
       <span className="text-center my-5">Wins: Placeholder Losses: Placholder </span>
       <Main/>
     </div>
-
-
   )
 }
+
+
 
 
