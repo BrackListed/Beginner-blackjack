@@ -73,6 +73,9 @@ export function Main() {
     let firstCard = null
     let secondCard = null
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
+const [sum, setSum] = useState(Number)
+let sumStorage = 0
+
   return (
     <div className="flex flex-col gap-3 text-center items-center">
         <span>Click Start!</span>
@@ -81,7 +84,7 @@ const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-
            <img src = {card.img} alt = "img of card" className="w-15 h-auto"></img>
         ))}
         </div>
-        <div id = 'sum-container'>Sum: </div>
+        <div id = 'sum-container'>Sum: {sum}</div>
         {gameStarted === false && <Buttons onClick = {() => {startGame(); setGameStarted(true)}}>Start</Buttons> }
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
@@ -95,18 +98,30 @@ const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-
         let newFirst = cardSelection[firstIndex]
         let secondIndex = Math.floor(Math.random() * cardSelection.length)
         let newSecond = cardSelection[secondIndex]
+        let StartingHand = [newFirst, newSecond]
         setCard([newFirst, newSecond])
-        localStorage.setItem("card-storage", JSON.stringify([newFirst, newSecond]))
-    }
+        {StartingHand.map((card => (
+            setSum(sumStorage += card.value)
+        )))}
+        console.log(StartingHand)
+  }
 
     function Hit() {
         let newIndex = Math.floor(Math.random() * cardSelection.length)
         let newCard = cardSelection[newIndex]
         setCard([...cards, newCard])
+        setSum(sum + newCard.value)
+        //why i have to click hit again before it becomes effecitve?
+        //ahh i see becuase  it's late at mapping card again
+        localStorage.setItem("card-storage", JSON.stringify([cards]))
+        console.log(sum)
+
     }
 
     function Stand() {
-        console.log('Hello')
+        {cards.map((card => (
+            console.log(card.value)
+        )))}
     }
 }
 
