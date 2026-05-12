@@ -72,12 +72,27 @@ export function Main() {
      {/* Dont forget to set gameStarted to false once the player has won/lost */}
     let firstCard = null
     let secondCard = null
+    let isAlive = false
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
 const [sum, setSum] = useState(Number)
+
+useEffect(() =>{
+    if(isAlive === false){
+        Reset()
+    } else{
+
+    }
+}, [isAlive])
+
 useEffect(() => {
-    Reset() 
-    setGameStarted(false)
-}, [sum > 21])
+    if(sum > 21) {
+        isAlive = false
+        setGameStarted(false)
+        return() => {
+            console.log("You lost.")
+        }
+    } 
+}, [sum])
 let sumStorage = 0
 
   return (
@@ -98,6 +113,7 @@ let sumStorage = 0
   )
 
   function startGame(){
+        isAlive = true
         let firstIndex = Math.floor(Math.random() * cardSelection.length)
         let newFirst = cardSelection[firstIndex]
         let secondIndex = Math.floor(Math.random() * cardSelection.length)
@@ -108,7 +124,6 @@ let sumStorage = 0
             setSum(sumStorage += card.value)
         )))}
         console.log(StartingHand)
-
   }
 
     function Hit() {
@@ -128,7 +143,6 @@ let sumStorage = 0
 
     function Reset() {
         setCard([])
-        setSum(0)
     }
 }
 
