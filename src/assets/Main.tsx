@@ -13,6 +13,7 @@ export function Main() {
         value: number;
         img: string;
     }
+
     let cardSelection: Card[] = [
     {name: "clubs_2", value: 2, img: "./playing-cards/clubs_2.png"},
     {name: "clubs_3", value: 3, img: "./playing-cards/clubs_3.png"},
@@ -71,19 +72,12 @@ export function Main() {
     const [gameStarted, setGameStarted] = useState(false)
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
-     {/* Dont forget to set gameStarted to false once the player has won/lost */}
     let firstCard = null
     let secondCard = null
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
 const [sum, setSum] = useState(Number)
+const [aceCounter, setAce] = useState(0)
 
-// useEffect(() =>{
-//     if(gameStarted === false){
-//         Reset()
-//     } else{
-
-//     }
-// }, [gameStarted])
 
 useEffect(() => {
     if(sum > 21) {
@@ -101,7 +95,6 @@ let sumStorage = 0
         {hasLost === true && <div className="flex items-center justify-center text-6xl text-red-600 font-extrabold animate-pulse">YOU LOST</div>}
         {hasWon === true && <div className="flex items-center justify-center text-6xl text-green-500 font-extrabold animate-bounce">YOU WON!</div>}
         {gameStarted === false && <span>Click Start!</span>}
-        {/* Project: Create a big "YOU LOST/WON" screen when a player has won/lost */}
         <div id = 'card-container' className="flex mx-auto my-5 gap-3">Cards: 
         {cards.map((card: Card) => (
            <img src = {card.img} className="w-15 h-auto"></img>
@@ -112,7 +105,7 @@ let sumStorage = 0
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
             <Buttons onClick = {() => Stand()}>Stand</Buttons>
-            </div>}
+        </div>}
     </div>
   )
 
@@ -129,6 +122,7 @@ let sumStorage = 0
         {StartingHand.map((card => (
             setSum(sumStorage += card.value)
         )))}
+        aceChecker(StartingHand, sumStorage)
   }
 
     function Hit() {
@@ -137,6 +131,9 @@ let sumStorage = 0
         setCard([...cards, newCard])
         setSum(sum + newCard.value)
         localStorage.setItem("card-storage", JSON.stringify([cards]))
+        const newHand = [...cards, newCard]
+        const newSum = sum + newCard.value
+        aceChecker(newHand, newSum)
     }
 
     function Stand() {
@@ -145,9 +142,21 @@ let sumStorage = 0
         )))}
     }
 
-    // function Reset() {
-    //     setCard([])
-    // }
+
+
+    function aceChecker(cards: Card[], sum: number){
+        let aceCount = 0
+        {cards.map((card) => {
+            if(card.value === 11){
+                aceCount += 1
+            }
+        })}
+        setAce(aceCount)
+        if(aceCount >= 1 && sum > 21){
+            setSum(sum - 10)
+        }
+    }
+
 }
 
 
