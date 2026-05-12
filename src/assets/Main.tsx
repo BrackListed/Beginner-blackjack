@@ -111,16 +111,21 @@ let sumStorage = 0
         Won(false)
         Lost(false)
         setGameStarted(true)
-        let firstIndex = Math.floor(Math.random() * cardSelection.length)
-        let newFirst = cardSelection[firstIndex]
-        let secondIndex = Math.floor(Math.random() * cardSelection.length)
-        let newSecond = cardSelection[secondIndex]
-        let StartingHand = [newFirst, newSecond]
-        setCard([newFirst, newSecond])
-        {StartingHand.map((card => (
+        if(cards.length === 0){
+            let firstIndex = Math.floor(Math.random() * cardSelection.length)
+            let newFirst = cardSelection[firstIndex]
+            let secondIndex = Math.floor(Math.random() * cardSelection.length)
+            let newSecond = cardSelection[secondIndex]
+            setCard([newFirst, newSecond])
+            let StartingHand = [newFirst, newSecond]
+            localStorage.setItem("card-storage", JSON.stringify(StartingHand))
+        }
+        //OK NOW WE HAVE FULLY SAVED IT. 
+        {cards.map((card => (
             setSum(sumStorage += card.value)
         )))}
-        aceChecker(StartingHand, sumStorage)
+        aceChecker(cards, sumStorage)
+        //current setup alllows it but it's very late & delayed. Gotta sync it somehow.
   }
 
     function Hit() {
@@ -158,4 +163,3 @@ let sumStorage = 0
     }
 
 }
-
