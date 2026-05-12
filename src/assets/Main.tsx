@@ -77,13 +77,13 @@ export function Main() {
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
 const [sum, setSum] = useState(Number)
 
-useEffect(() =>{
-    if(gameStarted === false){
-        Reset()
-    } else{
+// useEffect(() =>{
+//     if(gameStarted === false){
+//         Reset()
+//     } else{
 
-    }
-}, [gameStarted])
+//     }
+// }, [gameStarted])
 
 useEffect(() => {
     if(sum > 21) {
@@ -98,10 +98,13 @@ let sumStorage = 0
 
   return (
     <div className="flex flex-col gap-3 text-center items-center">
+        {hasLost === true && <div className="flex items-center justify-center text-6xl text-red-600 font-extrabold animate-pulse">YOU LOST</div>}
+        {hasWon === true && <div className="flex items-center justify-center text-6xl text-green-500 font-extrabold animate-bounce">YOU WON!</div>}
         {gameStarted === false && <span>Click Start!</span>}
+        {/* Project: Create a big "YOU LOST/WON" screen when a player has won/lost */}
         <div id = 'card-container' className="flex mx-auto my-5 gap-3">Cards: 
-        {gameStarted && cards.map((card: Card) => (
-           <img src = {card.img} alt = "img of card" className="w-15 h-auto"></img>
+        {cards.map((card: Card) => (
+           <img src = {card.img} className="w-15 h-auto"></img>
         ))}
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
@@ -114,6 +117,8 @@ let sumStorage = 0
   )
 
   function startGame(){
+        Won(false)
+        Lost(false)
         setGameStarted(true)
         let firstIndex = Math.floor(Math.random() * cardSelection.length)
         let newFirst = cardSelection[firstIndex]
@@ -140,9 +145,9 @@ let sumStorage = 0
         )))}
     }
 
-    function Reset() {
-        setCard([])
-    }
+    // function Reset() {
+    //     setCard([])
+    // }
 }
 
 
