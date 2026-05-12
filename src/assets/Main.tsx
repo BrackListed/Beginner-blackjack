@@ -72,9 +72,7 @@ export function Main() {
     const [gameStarted, setGameStarted] = useState(false)
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
-    let firstCard = null
-    let secondCard = null
-const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
+const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(Number)
 const [aceCounter, setAce] = useState(0)
 
@@ -154,9 +152,10 @@ let sumStorage = 0
         setAce(aceCount)
         if(aceCount >= 1 && sum > 21){
             setSum(sum - 10)
+            aceCount - 1
         }
+        
     }
 
 }
-
 
