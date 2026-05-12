@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons";
 
 export function Main() {
@@ -74,6 +74,10 @@ export function Main() {
     let secondCard = null
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
 const [sum, setSum] = useState(Number)
+useEffect(() => {
+    Reset() 
+    setGameStarted(false)
+}, [sum > 21])
 let sumStorage = 0
 
   return (
@@ -104,6 +108,7 @@ let sumStorage = 0
             setSum(sumStorage += card.value)
         )))}
         console.log(StartingHand)
+
   }
 
     function Hit() {
@@ -111,17 +116,19 @@ let sumStorage = 0
         let newCard = cardSelection[newIndex]
         setCard([...cards, newCard])
         setSum(sum + newCard.value)
-        //why i have to click hit again before it becomes effecitve?
-        //ahh i see becuase  it's late at mapping card again
         localStorage.setItem("card-storage", JSON.stringify([cards]))
         console.log(sum)
-
     }
 
     function Stand() {
         {cards.map((card => (
             console.log(card.value)
         )))}
+    }
+
+    function Reset() {
+        setCard([])
+        setSum(0)
     }
 }
 
