@@ -69,35 +69,36 @@ export function Main() {
 ]
 
     const [gameStarted, setGameStarted] = useState(false)
+    const [hasWon, Won] = useState(false)
+    const [hasLost, Lost] = useState(false)
      {/* Dont forget to set gameStarted to false once the player has won/lost */}
     let firstCard = null
     let secondCard = null
-    let isAlive = false
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [firstCard, secondCard])
 const [sum, setSum] = useState(Number)
 
 useEffect(() =>{
-    if(isAlive === false){
+    if(gameStarted === false){
         Reset()
     } else{
 
     }
-}, [isAlive])
+}, [gameStarted])
 
 useEffect(() => {
     if(sum > 21) {
-        isAlive = false
         setGameStarted(false)
-        return() => {
-            console.log("You lost.")
-        }
+        Lost(true)
+    } else if(sum === 21){
+        setGameStarted(false)
+        Won(true)
     } 
 }, [sum])
 let sumStorage = 0
 
   return (
     <div className="flex flex-col gap-3 text-center items-center">
-        <span>Click Start!</span>
+        {gameStarted === false && <span>Click Start!</span>}
         <div id = 'card-container' className="flex mx-auto my-5 gap-3">Cards: 
         {gameStarted && cards.map((card: Card) => (
            <img src = {card.img} alt = "img of card" className="w-15 h-auto"></img>
@@ -113,7 +114,7 @@ let sumStorage = 0
   )
 
   function startGame(){
-        isAlive = true
+        setGameStarted(true)
         let firstIndex = Math.floor(Math.random() * cardSelection.length)
         let newFirst = cardSelection[firstIndex]
         let secondIndex = Math.floor(Math.random() * cardSelection.length)
@@ -123,7 +124,6 @@ let sumStorage = 0
         {StartingHand.map((card => (
             setSum(sumStorage += card.value)
         )))}
-        console.log(StartingHand)
   }
 
     function Hit() {
@@ -132,12 +132,11 @@ let sumStorage = 0
         setCard([...cards, newCard])
         setSum(sum + newCard.value)
         localStorage.setItem("card-storage", JSON.stringify([cards]))
-        console.log(sum)
     }
 
     function Stand() {
         {cards.map((card => (
-            console.log(card.value)
+            console.log(card)
         )))}
     }
 
