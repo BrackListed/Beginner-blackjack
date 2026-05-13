@@ -69,33 +69,51 @@ export function Main() {
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
 
+<<<<<<< Updated upstream
     const [gameStarted, setGameStarted] = useState(localStorage.getItem("game-state") ?? false)
+=======
+    const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
+>>>>>>> Stashed changes
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "0") ?? 0)
 const [aceCounter, setAce] = useState(0)
+let secondIndex = Math.floor(Math.random() * cardSelection.length)
+let firstIndex = Math.floor(Math.random() * cardSelection.length)
 
 console.log("On Mount: " + gameStarted)
 useEffect(() => {
     if(gameStarted === true){
         startGame()
     } else{
+<<<<<<< Updated upstream
         // setCard([]) //Succeeded in saving the state, just failed because it no longer displays the cards after refresh.
+=======
+        setCard([]) //Succeeded in saving the state, just failed because it no longer displays the cards after refresh.
+>>>>>>> Stashed changes
     }
 }, [gameStarted])
 
 useEffect(() => {
     if(sum > 21) {
         setGameStarted(false)
+<<<<<<< Updated upstream
         localStorage.setItem("game-state", String(gameStarted))
+=======
+        localStorage.setItem("game-state", JSON.stringify((false)))
+>>>>>>> Stashed changes
         Lost(true)
         console.log("On lose: " + gameStarted)
     } else if(sum === 21){
         setGameStarted(false)
         Won(true)
         console.log("On Win: " + gameStarted)
+<<<<<<< Updated upstream
         localStorage.setItem("game-state", String(gameStarted))
+=======
+        localStorage.setItem("game-state", JSON.stringify((false)))
+>>>>>>> Stashed changes
     } 
 }, [sum])
 let sumStorage = 0;
@@ -112,7 +130,7 @@ console.log("Cards Initialized: " + cards)
         ))}
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
-        {gameStarted === false && <Buttons onClick = {() => {startGame(); setGameStarted(true)}}>Start</Buttons> }
+        {gameStarted === false && <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons> }
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
             <Buttons onClick = {() => Stand()}>Stand</Buttons>
@@ -120,6 +138,7 @@ console.log("Cards Initialized: " + cards)
     </div>
   )
   function startGame(){
+<<<<<<< Updated upstream
     console.log("Cards on Start: " + cards)
         Won(false)
         Lost(false)
@@ -133,13 +152,40 @@ console.log("Cards Initialized: " + cards)
         aceChecker(cards, sumStorage)
             //if the game hasn't started, allow for drawing a card, if it has, then do not.
             let firstIndex = Math.floor(Math.random() * cardSelection.length)
+=======
+        setGameStarted(true)
+        localStorage.setItem("game-state", JSON.stringify((true)))
+        setSum(0)
+        Won(false)
+        Lost(false)
+        let sumContainer = 0
+        if (gameStarted === false) {
+>>>>>>> Stashed changes
             let newFirst = cardSelection[firstIndex]
-            let secondIndex = Math.floor(Math.random() * cardSelection.length)
             let newSecond = cardSelection[secondIndex]
             setCard([newFirst, newSecond])
             let StartingHand = [newFirst, newSecond]
             localStorage.setItem("card-storage", JSON.stringify(StartingHand))
+<<<<<<< Updated upstream
         console.log("On start: " + gameStarted)
+=======
+            console.log("On start: " + gameStarted)
+            {StartingHand.map((defaultCards => (
+                sumContainer += defaultCards.value
+            )))}
+            setSum(sumContainer)
+            localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
+        }
+        {cards.map((card =>(
+            sumContainer += card.value
+        )))}
+        console.log("Sum on Start" + sumContainer)
+        setSum(sumContainer)
+        localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
+        aceChecker(cards, sumStorage)
+            //if the game hasn't started, allow for drawing a card, if it has, then do not.
+
+>>>>>>> Stashed changes
   }
 
     function Hit() {
@@ -152,6 +198,10 @@ console.log("Cards Initialized: " + cards)
         const newSum = sum + newCard.value
         console.log("Cards on Hit: " + cards)
         setSum(newSum)
+<<<<<<< Updated upstream
+=======
+        localStorage.setItem("sum-storage", JSON.stringify(newSum))
+>>>>>>> Stashed changes
         aceChecker(newHand, newSum)
     }
 
