@@ -69,32 +69,37 @@ export function Main() {
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
 
-    const [gameStarted, setGameStarted] = useState(false)
+    const [gameStarted, setGameStarted] = useState(localStorage.getItem("game-state") ?? false)
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "0") ?? 0)
 const [aceCounter, setAce] = useState(0)
 
-
-//watch if gamestarteed so it can always recheck sum
-// useEffect(() => {
-//     if(gameStarted === true){
-//         startGame()
-//     }
-// }, [gameStarted])
+console.log("On Mount: " + gameStarted)
+useEffect(() => {
+    if(gameStarted === true){
+        startGame()
+    } else{
+        // setCard([]) //Succeeded in saving the state, just failed because it no longer displays the cards after refresh.
+    }
+}, [gameStarted])
 
 useEffect(() => {
     if(sum > 21) {
         setGameStarted(false)
+        localStorage.setItem("game-state", String(gameStarted))
         Lost(true)
+        console.log("On lose: " + gameStarted)
     } else if(sum === 21){
         setGameStarted(false)
         Won(true)
+        console.log("On Win: " + gameStarted)
+        localStorage.setItem("game-state", String(gameStarted))
     } 
 }, [sum])
 let sumStorage = 0;
-console.log(cards)
+console.log("Cards Initialized: " + cards)
 
   return (
     <div className="flex flex-col gap-3 text-center items-center">
@@ -115,23 +120,18 @@ console.log(cards)
     </div>
   )
   function startGame(){
-    console.log(cards)
+    console.log("Cards on Start: " + cards)
         Won(false)
         Lost(false)
         setGameStarted(true)
+        localStorage.setItem("game-state", String(gameStarted))
         let sumContainer = 0
         {cards.map((card =>(
             sumContainer += card.value
-            //async's getting in the way again, setSum isn't good to use here
-            //tackle dis tom, rn it can work fine if u just start from the very beginning. local storage cleared and everthing
-            //setScore(prevScore => prevScore + 10); --> try this
-            //try having the sum be read even after the game starts, or better yet, use a useEffect that watches whether the start button is clicked
         )))}
         setSum(sumContainer)
-        console.log("Sum Con: " + sumContainer)
-        console.log('Sum: ' + sum)
         aceChecker(cards, sumStorage)
-        if(cards.length === 0){
+            //if the game hasn't started, allow for drawing a card, if it has, then do not.
             let firstIndex = Math.floor(Math.random() * cardSelection.length)
             let newFirst = cardSelection[firstIndex]
             let secondIndex = Math.floor(Math.random() * cardSelection.length)
@@ -139,14 +139,7 @@ console.log(cards)
             setCard([newFirst, newSecond])
             let StartingHand = [newFirst, newSecond]
             localStorage.setItem("card-storage", JSON.stringify(StartingHand))
-        }
-        //OK NOW WE HAVE FULLY SAVED IT. 
-        // {cards.map((card => ( 
-        //     setSum(sumStorage += card.value)
-        // )))}
-        // aceChecker(cards, sumStorage)
-        //current setup alllows it but it's very late & delayed. Gotta sync it somehow.
-        //let's try to focus on saving sum to a sum storage first!!
+        console.log("On start: " + gameStarted)
   }
 
     function Hit() {
@@ -154,9 +147,11 @@ console.log(cards)
         let newCard = cardSelection[newIndex]
         setCard([...cards, newCard])
         setSum(sum + newCard.value)
-        localStorage.setItem("card-storage", JSON.stringify([cards]))
         const newHand = [...cards, newCard]
+        localStorage.setItem("card-storage", JSON.stringify([newHand]))
         const newSum = sum + newCard.value
+        console.log("Cards on Hit: " + cards)
+        setSum(newSum)
         aceChecker(newHand, newSum)
     }
 
