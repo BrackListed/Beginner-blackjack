@@ -14,6 +14,11 @@ export function Main() {
         img: string;
     }
 
+    type Botcards = {
+        name: string;
+        value: number;
+        img: string;
+    }
     let cardSelection: Card[] = [
     {name: "clubs_2", value: 2, img: "./playing-cards/clubs_2.png"},
     {name: "clubs_3", value: 3, img: "./playing-cards/clubs_3.png"},
@@ -72,11 +77,18 @@ export function Main() {
     const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
+    const [hasTied, Tie] = useState(false)
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "0") ?? 0)
 const [aceCounter, setAce] = useState(0)
 let secondIndex = Math.floor(Math.random() * cardSelection.length)
 let firstIndex = Math.floor(Math.random() * cardSelection.length)
+let botIndex1 = Math.floor(Math.random() * cardSelection.length)
+let botIndex2=  Math.floor(Math.random() * cardSelection.length)
+const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getItem("bot-storage") ?? "null") ?? [])
+const [botacecounter, setbotacecounter] = useState(0)
+let [botSum, setBotSum] = useState(0)
+
 
 useEffect(() => {
     if(gameStarted === true){
@@ -105,23 +117,23 @@ useEffect(() => {
         localStorage.setItem("game-state", JSON.stringify((false)))
     } 
 }, [sum])
-// let sumStorage = 0;
 
   return (
     <div className="flex flex-col gap-3 text-center items-center">
         {hasLost === true && <div className="flex items-center justify-center text-6xl text-red-600 font-extrabold animate-pulse">YOU LOST</div>}
         {hasWon === true && <div className="flex items-center justify-center text-6xl text-green-500 font-extrabold animate-bounce">YOU WON!</div>}
+        {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
         {gameStarted === false && <span>Click Start!</span>}
         <div id = 'card-container' className="flex mx-auto my-5 gap-3">Cards: 
         {cards.map((card: Card) => (
-           <img src = {card.img} className="w-15 h-auto"></img>
+           <img src = {card.img} className="w-15 h-auto"></img> //learn framer motion and apply it here soon!
         ))}
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
         {gameStarted === false && <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons> }
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
-            <Buttons onClick = {() => Stand()}>Stand</Buttons>
+            <Buttons onClick = {() => Stand(sum)}>Stand</Buttons>
         </div>}
     </div>
   )
@@ -165,13 +177,52 @@ useEffect(() => {
         aceChecker(newHand, newSum, nextAceCount)
     }
 
-    function Stand() {
-        {cards.map((card => (
-            console.log(card)
-        )))}
+    function Stand(sum: number) {
+        let firstBot = cardSelection[botIndex1]
+        let secondBot = cardSelection[botIndex2]
+        let tempbotcounter = botacecounter
+        let botstartinghand = [firstBot, secondBot]
+        setBotHand(botstartinghand)
+        let botstartingsum = botstartinghand[0].value + botstartinghand[1].value
+        while(botstartingsum < 17){
+            let botnewindex = Math.floor(Math.random() * cardSelection.length)
+            const botnewcard = cardSelection[botnewindex]
+            if(botnewcard.value === 11){
+                tempbotcounter +=  1
+            }
+            botstartinghand.push(botnewcard)
+            botstartingsum += botnewcard.value
+        }
+        botAceChecker(botstartingsum, tempbotcounter)
+        
+        console.log("Bot Sum: " + botstartingsum)
+        console.log("Bot Hand" + botstartinghand)
+        if(botstartingsum > 21){
+            setGameStarted(false)
+            Won(true)
+        } else if(botstartingsum > sum && botSum < 21){
+            setGameStarted(false)
+            Lost(true)
+        } else if(botstartingsum < sum){
+            setGameStarted(false)
+            Won(true)
+        } else if (botstartingsum === sum){
+            setGameStarted(false)
+            Tie(true)
+        }
     }
 
 
+    function botAceChecker(botstartingsum:number, botacecounter:number){
+        let tempbotsum = botstartingsum
+        let tempbotaces = botacecounter
+        while(tempbotaces >= 1 && tempbotsum > 21){
+            tempbotsum -= 10
+            tempbotaces -= 1
+        }
+        setBotSum(tempbotsum)
+        setbotacecounter(tempbotaces)
+    }
 
     function aceChecker(newHand: Card[], sum: number, nextAceCount: number){
         let tempSum = sum
