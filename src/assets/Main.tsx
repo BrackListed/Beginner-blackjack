@@ -101,7 +101,7 @@ useEffect(() => {
         localStorage.setItem("sum-storage", JSON.stringify(tempSum))
         }
     } else{
-        setCard([]) 
+        // setCard([]) 
     }
 }, [gameStarted])
 
