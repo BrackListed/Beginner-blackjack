@@ -162,12 +162,7 @@ useEffect(() => {
         const newHand = [...cards, newCard]
         localStorage.setItem("card-storage", JSON.stringify(newHand))
         const newSum = sum + newCard.value
-        setSum(newSum)
-        localStorage.setItem("sum-storage", JSON.stringify(newSum))
-        console.log("New Sum:" + newSum)
-        console.log("Sum storage: " + sum)
         aceChecker(newHand, newSum, nextAceCount)
-        console.log("Current Aces: " + aceCounter)
     }
 
     function Stand() {
