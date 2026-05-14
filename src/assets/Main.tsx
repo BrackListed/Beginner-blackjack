@@ -80,11 +80,19 @@ let firstIndex = Math.floor(Math.random() * cardSelection.length)
 
 useEffect(() => {
     if(gameStarted === true){
-        startGame()
+        let tempSum = 0
+        if(cards.length > 1){
+            {cards.map((card =>(
+            tempSum += card.value
+        )))}
+        setSum(tempSum)
+        localStorage.setItem("sum-storage", JSON.stringify(tempSum))
+        }
     } else{
         setCard([]) 
     }
 }, [gameStarted])
+
 
 useEffect(() => {
     if(sum > 21) {
@@ -118,16 +126,19 @@ useEffect(() => {
     </div>
   )
   function startGame(){
-        let sumStorage = 0
         setGameStarted(true)
         localStorage.setItem("game-state", JSON.stringify((true)))
         setSum(0)
         Won(false)
         Lost(false)
         let sumContainer = 0
+        let initialAces = 0
         if (gameStarted === false) {
             let newFirst = cardSelection[firstIndex]
             let newSecond = cardSelection[secondIndex]
+            if(newFirst.value === 11) initialAces += 1
+            if(newSecond.value === 11) initialAces += 1
+            setAce(initialAces)
             setCard([newFirst, newSecond])
             let StartingHand = [newFirst, newSecond]
             localStorage.setItem("card-storage", JSON.stringify(StartingHand))
@@ -136,19 +147,24 @@ useEffect(() => {
             )))}
             setSum(sumContainer)
             localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
-        }
-        {cards.map((card =>(
-            sumContainer += card.value
-        )))}
+        } 
+        // {cards.map((card =>(
+        //     sumContainer += card.value
+        // )))}
         setSum(sumContainer)
         localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
-        aceChecker(cards, sumStorage)
+        aceChecker(cards, sum, initialAces)
 
   }
 
     function Hit() {
         let newIndex = Math.floor(Math.random() * cardSelection.length)
         let newCard = cardSelection[newIndex]
+        let nextAceCount = aceCounter
+        if(newCard.value === 11){
+            nextAceCount += 1
+        }
+        setAce(nextAceCount)
         setCard([...cards, newCard])
         setSum(sum + newCard.value)
         const newHand = [...cards, newCard]
@@ -158,7 +174,8 @@ useEffect(() => {
         localStorage.setItem("sum-storage", JSON.stringify(newSum))
         console.log("New Sum:" + newSum)
         console.log("Sum storage: " + sum)
-        aceChecker(newHand, newSum)
+        aceChecker(newHand, newSum, nextAceCount)
+        console.log("Current Aces: " + aceCounter)
     }
 
     function Stand() {
@@ -169,19 +186,16 @@ useEffect(() => {
 
 
 
-    function aceChecker(cards: Card[], sum: number){
-        let aceCount = 0
-        {cards.map((card) => {
-            if(card.value === 11){
-                aceCount += 1
-            }
-        })}
-        setAce(aceCount)
-        if(aceCount >= 1 && sum > 21){
-            setSum(sum - 10)
-            aceCount - 1
+    function aceChecker(newHand: Card[], sum: number, nextAceCount: number){
+        let tempSum = sum
+        let tempAces = nextAceCount
+        while(tempAces >= 1 && tempSum > 21){ 
+            tempSum -= 10
+            tempAces -= 1
         }
-        
+        setSum(tempSum) 
+        localStorage.setItem("sum-storage", JSON.stringify(tempSum))
+        setAce(tempAces)
     }
 
 }
