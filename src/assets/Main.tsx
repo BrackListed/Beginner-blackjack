@@ -139,6 +139,7 @@ useEffect(() => {
         </div>
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
+        <div id = "bot-sum">Bot Sum: {botSum}</div>
         {gameStarted === false && <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons> }
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
@@ -148,10 +149,12 @@ useEffect(() => {
   )
   function startGame(){
         setGameStarted(true)
+        setBotSum(0)
         localStorage.setItem("game-state", JSON.stringify((true)))
         setSum(0)
         Won(false)
         Lost(false)
+        Tie(false)
         let sumContainer = 0
         let initialAces = 0
         gameStarted === false
@@ -167,7 +170,7 @@ useEffect(() => {
             sumContainer += defaultCards.value
         )))}
         aceChecker(StartingHand, sumContainer, initialAces)
-
+        setBotHand([])
   }
 
     function Hit() {
