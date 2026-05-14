@@ -124,10 +124,19 @@ useEffect(() => {
         {hasWon === true && <div className="flex items-center justify-center text-6xl text-green-500 font-extrabold animate-bounce">YOU WON!</div>}
         {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
         {gameStarted === false && <span>Click Start!</span>}
-        <div id = 'card-container' className="flex mx-auto my-5 gap-3">Cards: 
-        {cards.map((card: Card) => (
-           <img src = {card.img} className="w-15 h-auto"></img> //learn framer motion and apply it here soon!
-        ))}
+        <div id = 'card-container' className="flex gap-30">
+        <div id = "player-container" className="flex mx-auto my-5 gap-3">
+            Cards: 
+            {cards.map((card: Card) => (
+                <img src = {card.img} className="w-15 h-auto"></img> //learn framer motion and apply it here soon!
+            ))}
+        </div>
+        <div id = "bot-container" className="flex mx-auto my-5 gap-3">
+            Bot Cards: 
+            {botHand.map((botcards => (
+                <img src = {botcards.img} className="w-15 h-auto"></img>
+            )))}
+        </div>
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
         {gameStarted === false && <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons> }
@@ -182,7 +191,6 @@ useEffect(() => {
         let secondBot = cardSelection[botIndex2]
         let tempbotcounter = botacecounter
         let botstartinghand = [firstBot, secondBot]
-        setBotHand(botstartinghand)
         let botstartingsum = botstartinghand[0].value + botstartinghand[1].value
         while(botstartingsum < 17){
             let botnewindex = Math.floor(Math.random() * cardSelection.length)
@@ -193,8 +201,8 @@ useEffect(() => {
             botstartinghand.push(botnewcard)
             botstartingsum += botnewcard.value
         }
+        setBotHand(botstartinghand)
         botAceChecker(botstartingsum, tempbotcounter)
-        
         console.log("Bot Sum: " + botstartingsum)
         console.log("Bot Hand" + botstartinghand)
         if(botstartingsum > 21){
