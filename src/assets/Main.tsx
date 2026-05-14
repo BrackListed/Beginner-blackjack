@@ -133,27 +133,19 @@ useEffect(() => {
         Lost(false)
         let sumContainer = 0
         let initialAces = 0
-        if (gameStarted === false) {
-            let newFirst = cardSelection[firstIndex]
-            let newSecond = cardSelection[secondIndex]
-            if(newFirst.value === 11) initialAces += 1
-            if(newSecond.value === 11) initialAces += 1
-            setAce(initialAces)
-            setCard([newFirst, newSecond])
-            let StartingHand = [newFirst, newSecond]
-            localStorage.setItem("card-storage", JSON.stringify(StartingHand))
-            {StartingHand.map((defaultCards => (
-                sumContainer += defaultCards.value
-            )))}
-            setSum(sumContainer)
-            localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
-        } 
-        // {cards.map((card =>(
-        //     sumContainer += card.value
-        // )))}
-        setSum(sumContainer)
-        localStorage.setItem("sum-storage", JSON.stringify(sumContainer))
-        aceChecker(cards, sum, initialAces)
+        gameStarted === false
+        let newFirst = cardSelection[firstIndex]
+        let newSecond = cardSelection[secondIndex]
+        if(newFirst.value === 11) initialAces += 1
+        if(newSecond.value === 11) initialAces += 1
+        setAce(initialAces)
+        setCard([newFirst, newSecond])
+        let StartingHand = [newFirst, newSecond]
+        localStorage.setItem("card-storage", JSON.stringify(StartingHand))
+        {StartingHand.map((defaultCards => (
+            sumContainer += defaultCards.value
+        )))}
+        aceChecker(StartingHand, sumContainer, initialAces)
 
   }
 
