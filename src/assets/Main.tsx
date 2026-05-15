@@ -88,7 +88,6 @@ export function Main({betState, betAmount, playerBalance, setPlayerBalance, setB
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
 
-    // const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
     const [hasTied, Tie] = useState(false)
@@ -200,7 +199,7 @@ useEffect(() => {
         {StartingHand.map((defaultCards => (
             sumContainer += defaultCards.value
         )))}
-        aceChecker(StartingHand, sumContainer, initialAces)
+        aceChecker(sumContainer, initialAces)
         setBotHand([])
   }
 
@@ -217,7 +216,7 @@ useEffect(() => {
         const newHand = [...cards, newCard]
         localStorage.setItem("card-storage", JSON.stringify(newHand))
         const newSum = sum + newCard.value
-        aceChecker(newHand, newSum, nextAceCount)
+        aceChecker(newSum, nextAceCount)
     }
 
     function Stand(sum: number) {
@@ -292,7 +291,7 @@ useEffect(() => {
         setbotacecounter(tempbotaces)
     }
 
-    function aceChecker(newHand: Card[], sum: number, nextAceCount: number){
+    function aceChecker(sum: number, nextAceCount: number){
         let tempSum = sum
         let tempAces = nextAceCount
         while(tempAces >= 1 && tempSum > 21){ 
