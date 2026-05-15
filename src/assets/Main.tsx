@@ -87,7 +87,6 @@ export function Main({betState, betAmount, playerBalance, setPlayerBalance, setB
     {name: "spades_Q", value: 10, img: "./playing-cards/spades_Q.png"},
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
-
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
     const [hasTied, Tie] = useState(false)
