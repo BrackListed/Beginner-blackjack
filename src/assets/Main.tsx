@@ -84,10 +84,6 @@ export function Main({betState}: MainProps) {
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "0") ?? 0)
 const [aceCounter, setAce] = useState(0)
-let secondIndex = Math.floor(Math.random() * cardSelection.length)
-let firstIndex = Math.floor(Math.random() * cardSelection.length)
-let botIndex1 = Math.floor(Math.random() * cardSelection.length)
-let botIndex2=  Math.floor(Math.random() * cardSelection.length)
 const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getItem("bot-storage") ?? "null") ?? [])
 const [botacecounter, setbotacecounter] = useState(0)
 let [botSum, setBotSum] = useState(0)
@@ -155,6 +151,8 @@ useEffect(() => {
     </div>
   )
   function startGame(){
+        let secondIndex = Math.floor(Math.random() * cardSelection.length)
+        let firstIndex = Math.floor(Math.random() * cardSelection.length)
         setGameStarted(true)
         setBotSum(0)
         localStorage.setItem("game-state", JSON.stringify((true)))
@@ -197,6 +195,8 @@ useEffect(() => {
     }
 
     function Stand(sum: number) {
+        let botIndex1 = Math.floor(Math.random() * cardSelection.length)
+        let botIndex2=  Math.floor(Math.random() * cardSelection.length)
         let firstBot = cardSelection[botIndex1]
         let secondBot = cardSelection[botIndex2]
         let tempbotcounter = botacecounter

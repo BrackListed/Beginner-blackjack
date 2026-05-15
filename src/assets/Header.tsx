@@ -5,6 +5,7 @@ type HeaderProps = {
   betPlaced: (value: boolean) => void //pass betPlaced as a prop
 }
 export function Header({betPlaced}: HeaderProps){
+      console.log(betPlaced)
   let [userBalance, setBalance] = useState(parseInt(localStorage.getItem('balance-storage') ?? "0") ?? 0)
   const [betError, setBetError] = useState(false)
   const [userBet, setBet] = useState(0)
@@ -46,13 +47,15 @@ export function Header({betPlaced}: HeaderProps){
     })
   }
 
-  function betCheck(betInput: number){
-    if(Number(betInput) > userBalance){
+  function betCheck(amount: number){
+    if(Number(amount) > userBalance || amount <= 0){
       setBetError(true)
+      betPlaced(false)
     } else{
       setBetError(false)
-      setBet(betInput)
+      setBet(amount)
       betPlaced(true)
     }
+
   }
 }
