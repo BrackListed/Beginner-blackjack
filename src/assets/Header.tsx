@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Buttons } from "./Buttons";
 
 export function Header(){
   let [userBalance, setBalance] = useState(parseInt(localStorage.getItem('balance-storage') ?? "0") ?? 0)
+  const [betError, setBetError] = useState(false)
+  const [userBet, setBet] = useState(0)
+  const betInput = useRef<HTMLInputElement>(null)
   return(
     <div className="flex flex-col  gap-5">
       <h1 className="my-6 mx-auto text-4xl font-extrabold">SIMPLE BLACKJACK GAME</h1>
@@ -18,9 +21,14 @@ export function Header(){
         </div>
         <div id = "right" className="flex flex-col gap-2">
             <span>Balance: {userBalance} </span>
-            <label htmlFor = "bet-input">Bet: 
-                <input id = "bet-input" type = "text" className="mx-2 outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1 hover:cursor-pointer transition-transform hover:scale-105"></input>
-            </label>
+            <div className="flex gap-2 items-center">
+              <label htmlFor = "bet-input">Bet: 
+                <input ref = {betInput} id = "bet-input" type = "text" className="mx-2 outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1 hover:cursor-pointer transition-transform hover:scale-105"></input>
+              </label>
+              <Buttons onClick={() => betCheck(Number(betInput.current?.value))}>BET</Buttons>
+            </div>
+            {betError && <h1>Needed Balance: {Number(betInput.current?.value) - userBalance}</h1>}
+            {betError === false && <h1>Current Bet: {betInput.current?.value}</h1>}
             <span>Player Bet: </span>
         </div>
         
@@ -36,4 +44,12 @@ export function Header(){
     })
   }
 
+  function betCheck(betInput: number){
+    if(Number(betInput) > userBalance){
+      setBetError(true)
+    } else{
+      setBetError(false)
+      setBet(betInput)
+    }
+  }
 }
