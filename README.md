@@ -3,4 +3,6 @@ This is a  website that simulates a real blackjack game with real odds. I derive
 ## 🌐Link to the website
 https://bracklisted.github.io/Beginner-blackjack/
 ### ℹ️Information
-Legacy webpage! Logic runs entirely on vanilla javascript
+Legacy webpage! Logic runs entirely on vanilla javascript. Switch to the other branch to see the new website!
+### 📷Website Previews
+![Website Preview](./images/Website.png)
