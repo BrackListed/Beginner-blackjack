@@ -28,6 +28,7 @@ export default function App (){
       setBetAmount = {setBetAmount} 
       gameStarted = {gameStarted}
       setGameStarted = {setGameStarted}
+      setBetState={setBetState}
       />
     </div>
     

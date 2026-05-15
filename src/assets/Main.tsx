@@ -9,8 +9,9 @@ type MainProps = {
     setBetAmount: (value: number) => void
     gameStarted: boolean;
     setGameStarted: (value: boolean) => void
+    setBetState: (value: boolean) => void
 }
-export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted}: MainProps) {
+export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted, setBetState}: MainProps) {
     type Card = {
         name: string; 
         value: number;
@@ -119,6 +120,8 @@ useEffect(() => {
         const lostBalance = playerBalance - betAmount
         localStorage.setItem("balance-storage", JSON.stringify(lostBalance))
         setPlayerBalance(lostBalance)
+        setBetAmount(0)
+        setBetState(false)
     } else if(sum === 21){
         setGameStarted(false)
         Won(true)
@@ -126,6 +129,7 @@ useEffect(() => {
         const wonBalance = playerBalance + (betAmount * 2)
         localStorage.setItem("balance-storage", JSON.stringify(wonBalance))
         setPlayerBalance(wonBalance)
+        setBetState(false)
     } 
 }, [sum])
 
@@ -233,18 +237,24 @@ useEffect(() => {
             const botBustBalance = playerBalance + (betAmount * 2)
             setPlayerBalance(botBustBalance)
             localStorage.setItem("balance-storage", JSON.stringify(botBustBalance))
+            setBetAmount(0)
+            setBetState(false)
         } else if(botstartingsum > sum && botSum < 21){
             setGameStarted(false)
             Lost(true)
             const standLostBalance = playerBalance - betAmount
             localStorage.setItem("balance-storage", JSON.stringify(standLostBalance))
             setPlayerBalance(standLostBalance)
+            setBetAmount(0)
+            setBetState(false)
         } else if(botstartingsum < sum){
             setGameStarted(false)
             Won(true)
             const standWonBalance = playerBalance + (betAmount * 2)
             localStorage.setItem("balance-storage", JSON.stringify(standWonBalance))
             setPlayerBalance(standWonBalance)
+            setBetAmount(0)
+            setBetState(false)
         } else if (botstartingsum === sum){
             setGameStarted(false)
             Tie(true)
