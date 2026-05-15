@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons";
 
-export function Main() {
+type MainProps = {
+    betState: boolean //receive the prop and declare its type
+}
+export function Main({betState}: MainProps) {
     type Card = {
         name: string; 
         value: number;
@@ -89,7 +92,7 @@ const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getIt
 const [botacecounter, setbotacecounter] = useState(0)
 let [botSum, setBotSum] = useState(0)
 
-
+console.log(betState)
 useEffect(() => {
     if(gameStarted === true){
         let tempSum = 0
@@ -123,7 +126,7 @@ useEffect(() => {
         {hasLost === true && <div className="flex items-center justify-center text-6xl text-red-600 font-extrabold animate-pulse">YOU LOST</div>}
         {hasWon === true && <div className="flex items-center justify-center text-6xl text-green-500 font-extrabold animate-bounce">YOU WON!</div>}
         {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
-        {gameStarted === false && <span>Click Start!</span>}
+        {gameStarted === false && <span>Add a bet to get started!</span>}
         <div id = 'card-container' className="flex gap-30">
         <div id = "player-container" className="flex mx-auto my-5 gap-3">
             Cards: 
@@ -140,7 +143,11 @@ useEffect(() => {
         </div>
         <div id = 'sum-container'>Sum: {sum}</div>
         <div id = "bot-sum">Bot Sum: {botSum}</div>
-        {gameStarted === false && <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons> }
+        {gameStarted === false && betState === true? (
+            <Buttons onClick = {() => {setGameStarted(true); startGame()}}>Start</Buttons>
+        ) : (
+            <h1></h1>
+        )}
         {gameStarted && <div className="flex flex-col gap-2 items-center">
             <Buttons onClick = {() => Hit()}>Hit</Buttons>
             <Buttons onClick = {() => Stand(sum)}>Stand</Buttons>

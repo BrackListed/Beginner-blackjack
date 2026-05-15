@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import { Buttons } from "./Buttons";
 
-export function Header(){
+type HeaderProps = {
+  betPlaced: (value: boolean) => void //pass betPlaced as a prop
+}
+export function Header({betPlaced}: HeaderProps){
   let [userBalance, setBalance] = useState(parseInt(localStorage.getItem('balance-storage') ?? "0") ?? 0)
   const [betError, setBetError] = useState(false)
   const [userBet, setBet] = useState(0)
@@ -28,8 +31,7 @@ export function Header(){
               <Buttons onClick={() => betCheck(Number(betInput.current?.value))}>BET</Buttons>
             </div>
             {betError && <h1>Needed Balance: {Number(betInput.current?.value) - userBalance}</h1>}
-            {betError === false && <h1>Current Bet: {betInput.current?.value}</h1>}
-            <span>Player Bet: </span>
+            {betError === false && <h1>Current Bet: {userBet}</h1>}
         </div>
         
       </div>
@@ -50,6 +52,7 @@ export function Header(){
     } else{
       setBetError(false)
       setBet(betInput)
+      betPlaced(true)
     }
   }
 }
