@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons";
 
 type MainProps = {
-    betState: boolean //receive the prop and declare its type
+    betState: boolean; //receive the prop and declare its type
+    betAmount: number;
+    playerBalance: number;
+    setPlayerBalance: (value: number) => void
+    setBetAmount: (value: number) => void
+    gameStarted: boolean;
+    setGameStarted: (value: boolean) => void
 }
-export function Main({betState}: MainProps) {
+export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted}: MainProps) {
     type Card = {
         name: string; 
         value: number;
@@ -77,7 +83,7 @@ export function Main({betState}: MainProps) {
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
 
-    const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
+    // const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
     const [hasWon, Won] = useState(false)
     const [hasLost, Lost] = useState(false)
     const [hasTied, Tie] = useState(false)
@@ -88,7 +94,7 @@ const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getIt
 const [botacecounter, setbotacecounter] = useState(0)
 let [botSum, setBotSum] = useState(0)
 
-console.log(betState)
+
 useEffect(() => {
     if(gameStarted === true){
         let tempSum = 0
@@ -110,10 +116,16 @@ useEffect(() => {
         setGameStarted(false)
         localStorage.setItem("game-state", JSON.stringify((false)))
         Lost(true)
+        const lostBalance = playerBalance - betAmount
+        localStorage.setItem("balance-storage", JSON.stringify(lostBalance))
+        setPlayerBalance(lostBalance)
     } else if(sum === 21){
         setGameStarted(false)
         Won(true)
         localStorage.setItem("game-state", JSON.stringify((false)))
+        const wonBalance = playerBalance + (betAmount * 2)
+        localStorage.setItem("balance-storage", JSON.stringify(wonBalance))
+        setPlayerBalance(wonBalance)
     } 
 }, [sum])
 
@@ -218,12 +230,21 @@ useEffect(() => {
         if(botstartingsum > 21){
             setGameStarted(false)
             Won(true)
+            const botBustBalance = playerBalance + (betAmount * 2)
+            setPlayerBalance(botBustBalance)
+            localStorage.setItem("balance-storage", JSON.stringify(botBustBalance))
         } else if(botstartingsum > sum && botSum < 21){
             setGameStarted(false)
             Lost(true)
+            const standLostBalance = playerBalance - betAmount
+            localStorage.setItem("balance-storage", JSON.stringify(standLostBalance))
+            setPlayerBalance(standLostBalance)
         } else if(botstartingsum < sum){
             setGameStarted(false)
             Won(true)
+            const standWonBalance = playerBalance + (betAmount * 2)
+            localStorage.setItem("balance-storage", JSON.stringify(standWonBalance))
+            setPlayerBalance(standWonBalance)
         } else if (botstartingsum === sum){
             setGameStarted(false)
             Tie(true)
