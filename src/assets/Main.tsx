@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons";
+import { motion } from "motion/react"
 
 type MainProps = {
     betState: boolean; //receive the prop and declare its type
@@ -14,8 +15,16 @@ type MainProps = {
     setWin: (value: number) => void
     lossCount: number
     setLoss: (value: number) => void
+    cardVisible: boolean
+    setCardVisibility: (value: boolean) => void
+    hasWon: boolean
+    Won: (value: boolean) => void
+    hasLost: boolean 
+    Lost: (value: boolean) => void
+    clickedStand: boolean
+    setStand: (value: boolean) => void
 }
-export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted, setBetState, winCount, setWin, lossCount, setLoss}: MainProps) {
+export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted, setBetState, winCount, setWin, lossCount, setLoss, cardVisible, setCardVisibility, hasWon, Won, hasLost, Lost, clickedStand, setStand}: MainProps) {
     type Card = {
         name: string; 
         value: number;
@@ -87,15 +96,12 @@ export function Main({betState, betAmount, playerBalance, setPlayerBalance, setB
     {name: "spades_Q", value: 10, img: "./playing-cards/spades_Q.png"},
     {name: "spades_A", value: 11, img: "./playing-cards/spades_A.png"},
 ]
-    const [hasWon, Won] = useState(false)
-    const [hasLost, Lost] = useState(false)
     const [hasTied, Tie] = useState(false)
 const [cards, setCard] = useState<Card[]>(JSON.parse(localStorage.getItem("card-storage") ?? "null") ?? [])
 const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "0") ?? 0)
 const [aceCounter, setAce] = useState(0)
 const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getItem("bot-storage") ?? "null") ?? [])
 const [botacecounter, setbotacecounter] = useState(0)
-const [clickedStand, setStand] = useState(false)
 let [botSum, setBotSum] = useState(0)
 
 
@@ -149,29 +155,40 @@ useEffect(() => {
         {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
         {gameStarted === false && <span>Add a bet to get started!</span>}
         <div id = 'card-container' className="flex w-screen justify-evenly">
-        <div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
+        {cardVisible === true && <motion.div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500"
+        initial={{x: '-100vw'}}
+        animate = {{x: 0}}
+        >
             <div className="flex gap-3">
                 Cards: 
+                <div className="flex gap-3" >
                     {cards.map((card: Card) => (
-                    <img src = {card.img} className="w-15 h-auto"></img> //learn framer motion and apply it here soon!
-                    ))}
+                        <motion.img src = {card.img} className="w-15 h-auto"
+                        initial={{x: -250, opacity:0}}
+                        animate={{x: 20, opacity: 20 }}
+                        
+                        ></motion.img> //learn framer motion and apply it here soon!
+                    ))}</div>
             </div>
             <div>Sum: {sum} </div>
-        </div>
+        </motion.div>}
         {clickedStand === true && <div id = "bot-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
-            <div className="flex gap-3">
+            <motion.div className="flex gap-3"
+            initial={{x: '100vw'}}
+            animate = {{x: 0}}
+        >
                 Bot Cards: 
                 {botHand.map((botcards => (
                     <img src = {botcards.img} className="w-15 h-auto"></img>
                  )))}      
-            </div>
+            </motion.div>
 
             <div>Sum: {botSum}</div>
         </div>} 
 
     </div>
         {gameStarted === false && betState === true? (
-            <Buttons onClick = {() => {setGameStarted(true); startGame(); setStand(false)}}>Start</Buttons>
+            <Buttons onClick = {() => {setGameStarted(true); startGame(cardVisible); setStand(false);}}>Start</Buttons>
         ) : (
             <h1></h1>
         )}
@@ -181,7 +198,11 @@ useEffect(() => {
         </div>}
     </div>
   )
-  function startGame(){
+  function startGame(cardVisible: boolean){
+    let tempcardvisiblity = cardVisible
+    tempcardvisiblity = true
+    localStorage.setItem("card-visibility", JSON.stringify(tempcardvisiblity))
+    setCardVisibility(true)
         let secondIndex = Math.floor(Math.random() * cardSelection.length)
         let firstIndex = Math.floor(Math.random() * cardSelection.length)
         setGameStarted(true)

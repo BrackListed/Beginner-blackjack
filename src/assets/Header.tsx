@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Buttons } from "./Buttons";
 
+
 type HeaderProps = {
   betPlaced: (value: boolean) => void; //pass betPlaced as a prop
   betAmount: number;
@@ -8,8 +9,13 @@ type HeaderProps = {
   setPlayerBalance: (value: number) => void;
   setBetAmount: (value: number) => void;
   gameStarted: boolean
+  cardVisible: boolean
+  setCardVisibility: (value: boolean) => void
+  Won: (value: boolean) => void
+  Lost: (value: boolean) => void
+  setStand: (value: boolean) => void
 }
-export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted}: HeaderProps){
+export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setCardVisibility, Won, Lost, setStand}: HeaderProps){
   console.log(betPlaced)
   const [betError, setBetError] = useState(false)
   const betInput = useRef<HTMLInputElement>(null)
@@ -43,13 +49,9 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
   )
 
   function increaseBalance(bal: number){
-    //SAY YOUR BALANCE IS 20
-    //new balance adds on top of the alrready existing bal "bal"
-    //new balance is = 20 + 1, 5, 10, or 100
       const newBalance = playerBalance += bal
-      localStorage.setItem("balance-storage", JSON.stringify(newBalance)) //this stores the new balance if the former balance was 200, 
-      //then the new balance is 20 + bal, and say bal is 10, the new stored balance is 30. 
-      setPlayerBalance(newBalance) //this is supposed to set the balance to 30! 
+      localStorage.setItem("balance-storage", JSON.stringify(newBalance)) 
+      setPlayerBalance(newBalance)
     }
 
   function betCheck(amount: number, playerBalance: number){
@@ -57,11 +59,15 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
       setBetError(true)
       betPlaced(false)
     } else{
+      Won(false)
+      Lost(false)
       setBetError(false)
       setBetAmount(amount)
       betPlaced(true)
       localStorage.setItem("bet-storage", JSON.stringify(amount))
       setBetAmount(amount)
+      setCardVisibility(false)
+      setStand(false)
     }
 
   }
