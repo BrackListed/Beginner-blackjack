@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons";
+import { motion } from "motion/react"
 
 type MainProps = {
     betState: boolean; //receive the prop and declare its type
@@ -149,15 +150,22 @@ useEffect(() => {
         {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
         {gameStarted === false && <span>Add a bet to get started!</span>}
         <div id = 'card-container' className="flex w-screen justify-evenly">
-        <div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
+        {gameStarted === true && <div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
             <div className="flex gap-3">
                 Cards: 
+                <motion.div className="flex gap-3" 
+                initial={{x: -250}}
+                animate={{x: 0}}
+                >
                     {cards.map((card: Card) => (
-                    <img src = {card.img} className="w-15 h-auto"></img> //learn framer motion and apply it here soon!
-                    ))}
+                        <motion.img src = {card.img} className="w-15 h-auto"
+                        initial={{x: -250}}
+                        animate={{x: 0}}
+                        ></motion.img> //learn framer motion and apply it here soon!
+                    ))}</motion.div>
             </div>
             <div>Sum: {sum} </div>
-        </div>
+        </div>}
         {clickedStand === true && <div id = "bot-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
             <div className="flex gap-3">
                 Bot Cards: 
