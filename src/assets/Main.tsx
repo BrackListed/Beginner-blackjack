@@ -21,8 +21,10 @@ type MainProps = {
     Won: (value: boolean) => void
     hasLost: boolean 
     Lost: (value: boolean) => void
+    clickedStand: boolean
+    setStand: (value: boolean) => void
 }
-export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted, setBetState, winCount, setWin, lossCount, setLoss, cardVisible, setCardVisibility, hasWon, Won, hasLost, Lost}: MainProps) {
+export function Main({betState, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setGameStarted, setBetState, winCount, setWin, lossCount, setLoss, cardVisible, setCardVisibility, hasWon, Won, hasLost, Lost, clickedStand, setStand}: MainProps) {
     type Card = {
         name: string; 
         value: number;
@@ -100,7 +102,6 @@ const [sum, setSum] = useState(parseInt(localStorage.getItem("sum-storage") ?? "
 const [aceCounter, setAce] = useState(0)
 const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getItem("bot-storage") ?? "null") ?? [])
 const [botacecounter, setbotacecounter] = useState(0)
-const [clickedStand, setStand] = useState(false)
 let [botSum, setBotSum] = useState(0)
 
 
@@ -155,8 +156,8 @@ useEffect(() => {
         {gameStarted === false && <span>Add a bet to get started!</span>}
         <div id = 'card-container' className="flex w-screen justify-evenly">
         {cardVisible === true && <motion.div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500"
-        initial={{x: -250, opacity: 0}}
-        animate = {{x: 0, opacity: 100}}
+        initial={{x: '-100vw'}}
+        animate = {{x: 0}}
         >
             <div className="flex gap-3">
                 Cards: 
@@ -173,8 +174,8 @@ useEffect(() => {
         </motion.div>}
         {clickedStand === true && <div id = "bot-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
             <motion.div className="flex gap-3"
-            initial={{x: -250, opacity: 0}}
-            animate = {{x: 0, opacity: 100}}
+            initial={{x: '100vw'}}
+            animate = {{x: 0}}
         >
                 Bot Cards: 
                 {botHand.map((botcards => (

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Buttons } from "./Buttons";
 
+
 type HeaderProps = {
   betPlaced: (value: boolean) => void; //pass betPlaced as a prop
   betAmount: number;
@@ -10,12 +11,11 @@ type HeaderProps = {
   gameStarted: boolean
   cardVisible: boolean
   setCardVisibility: (value: boolean) => void
-  hasWon: boolean
   Won: (value: boolean) => void
-  hasLost: boolean
   Lost: (value: boolean) => void
+  setStand: (value: boolean) => void
 }
-export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, cardVisible, setCardVisibility, Won, hasWon, Lost, hasLost}: HeaderProps){
+export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setCardVisibility, Won, Lost, setStand}: HeaderProps){
   console.log(betPlaced)
   const [betError, setBetError] = useState(false)
   const betInput = useRef<HTMLInputElement>(null)
@@ -38,7 +38,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
               <label htmlFor = "bet-input">Bet: 
                 <input ref = {betInput} id = "bet-input" type = "text" className="mx-2 outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1 hover:cursor-pointer transition-transform hover:scale-105"></input>
               </label>
-              {gameStarted === false && <Buttons onClick={() => betCheck(Number(betInput.current?.value), playerBalance, cardVisible)}>BET</Buttons>}
+              {gameStarted === false && <Buttons onClick={() => betCheck(Number(betInput.current?.value), playerBalance)}>BET</Buttons>}
             </div>
             {betError && <h1>Needed Balance: {Number(betInput.current?.value) - playerBalance}</h1>}
             {betError === false && <h1>Current Bet: {betAmount}</h1>}
@@ -49,16 +49,12 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
   )
 
   function increaseBalance(bal: number){
-    //SAY YOUR BALANCE IS 20
-    //new balance adds on top of the alrready existing bal "bal"
-    //new balance is = 20 + 1, 5, 10, or 100
       const newBalance = playerBalance += bal
-      localStorage.setItem("balance-storage", JSON.stringify(newBalance)) //this stores the new balance if the former balance was 200, 
-      //then the new balance is 20 + bal, and say bal is 10, the new stored balance is 30. 
-      setPlayerBalance(newBalance) //this is supposed to set the balance to 30! 
+      localStorage.setItem("balance-storage", JSON.stringify(newBalance)) 
+      setPlayerBalance(newBalance)
     }
 
-  function betCheck(amount: number, playerBalance: number, cardVisible:boolean){
+  function betCheck(amount: number, playerBalance: number){
     if(Number(amount) > playerBalance || amount <= 0){
       setBetError(true)
       betPlaced(false)
@@ -71,6 +67,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
       localStorage.setItem("bet-storage", JSON.stringify(amount))
       setBetAmount(amount)
       setCardVisibility(false)
+      setStand(false)
     }
 
   }
