@@ -8,8 +8,14 @@ type HeaderProps = {
   setPlayerBalance: (value: number) => void;
   setBetAmount: (value: number) => void;
   gameStarted: boolean
+  cardVisible: boolean
+  setCardVisibility: (value: boolean) => void
+  hasWon: boolean
+  Won: (value: boolean) => void
+  hasLost: boolean
+  Lost: (value: boolean) => void
 }
-export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted}: HeaderProps){
+export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, cardVisible, setCardVisibility, Won, hasWon, Lost, hasLost}: HeaderProps){
   console.log(betPlaced)
   const [betError, setBetError] = useState(false)
   const betInput = useRef<HTMLInputElement>(null)
@@ -32,7 +38,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
               <label htmlFor = "bet-input">Bet: 
                 <input ref = {betInput} id = "bet-input" type = "text" className="mx-2 outline-none focus-visible:ring-1 focus-visible:ring-amber-300 w-44 rounded-lg gap-2 bg-black/40 px-2 py-1 hover:cursor-pointer transition-transform hover:scale-105"></input>
               </label>
-              {gameStarted === false && <Buttons onClick={() => betCheck(Number(betInput.current?.value), playerBalance)}>BET</Buttons>}
+              {gameStarted === false && <Buttons onClick={() => betCheck(Number(betInput.current?.value), playerBalance, cardVisible)}>BET</Buttons>}
             </div>
             {betError && <h1>Needed Balance: {Number(betInput.current?.value) - playerBalance}</h1>}
             {betError === false && <h1>Current Bet: {betAmount}</h1>}
@@ -52,16 +58,19 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
       setPlayerBalance(newBalance) //this is supposed to set the balance to 30! 
     }
 
-  function betCheck(amount: number, playerBalance: number){
+  function betCheck(amount: number, playerBalance: number, cardVisible:boolean){
     if(Number(amount) > playerBalance || amount <= 0){
       setBetError(true)
       betPlaced(false)
     } else{
+      Won(false)
+      Lost(false)
       setBetError(false)
       setBetAmount(amount)
       betPlaced(true)
       localStorage.setItem("bet-storage", JSON.stringify(amount))
       setBetAmount(amount)
+      setCardVisibility(false)
     }
 
   }

@@ -11,6 +11,9 @@ export default function App (){
   const [gameStarted, setGameStarted] = useState(JSON.parse(localStorage.getItem("game-state") ?? "false"))
   const [winCount, setWin] = useState(parseInt(localStorage.getItem("win-storage") ?? "0")?? 0)
   const [lossCount, setLoss] = useState(parseInt(localStorage.getItem("loss-storage") ?? "0")?? 0)
+  const [cardVisible, setCardVisibility] = useState(JSON.parse(localStorage.getItem("card-visibility") ?? "false"))
+  const [hasWon, Won] = useState(false)
+  const [hasLost, Lost] = useState(false)
   return(
     <div className="flex flex-col items-center">
       <Header 
@@ -20,6 +23,12 @@ export default function App (){
       setPlayerBalance={setBalance}
       setBetAmount={setBetAmount}
       gameStarted = {gameStarted}
+      cardVisible = {cardVisible}
+      setCardVisibility = {setCardVisibility}
+      hasWon = {hasWon}
+      Won = {Won}
+      hasLost = {hasLost}
+      Lost={Lost}
       />   
       <span className="text-center my-5">Wins: {winCount} Losses: {lossCount} </span>
       <Main 
@@ -35,6 +44,12 @@ export default function App (){
       setWin = {setWin}
       lossCount = {lossCount}
       setLoss = {setLoss}
+      cardVisible = {cardVisible}
+      setCardVisibility = {setCardVisibility}
+      hasWon = {hasWon}
+      Won = {Won}
+      hasLost = {hasLost}
+      Lost = {Lost}
       />
     </div>
     
