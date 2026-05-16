@@ -3,7 +3,7 @@
 
 
 body{
-    background-image: url(./assets/images/360_F_97463619_ZHqQiR70xv5HRiTJlkfyetkzxrmezDtP.jpg);
+    background-image: url(./assets/images/background3.jpg);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -11,5 +11,5 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #ffd700;
+    color:var(--color-zinc-50)
 }

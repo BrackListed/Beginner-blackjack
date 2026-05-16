@@ -14,7 +14,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
   const [betError, setBetError] = useState(false)
   const betInput = useRef<HTMLInputElement>(null)
   return(
-    <div className="flex flex-col  gap-5">
+    <div className="flex flex-col">
       <h1 className="my-6 mx-auto text-4xl font-extrabold">SIMPLE BLACKJACK GAME</h1>
       <div id = "money-container" className="flex gap-5">
 
@@ -60,6 +60,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
       setBetError(false)
       setBetAmount(amount)
       betPlaced(true)
+      localStorage.setItem("bet-storage", JSON.stringify(amount))
       setBetAmount(amount)
     }
 
