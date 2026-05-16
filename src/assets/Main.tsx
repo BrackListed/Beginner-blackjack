@@ -97,6 +97,7 @@ const [aceCounter, setAce] = useState(0)
 const [botHand, setBotHand] = useState<Botcards[]>(JSON.parse(localStorage.getItem("bot-storage") ?? "null") ?? [])
 const [botacecounter, setbotacecounter] = useState(0)
 const [clickedStand, setStand] = useState(false)
+const [cardVisible, setCardVisibility] = useState(JSON.parse(localStorage.getItem("card-visibility") ?? "false"))
 let [botSum, setBotSum] = useState(0)
 
 
@@ -150,7 +151,7 @@ useEffect(() => {
         {hasTied === true && <div className="flex items-center justify-center text-6xl text-yellow-600 font-extrabold animate-bounce">TIE!</div>}
         {gameStarted === false && <span>Add a bet to get started!</span>}
         <div id = 'card-container' className="flex w-screen justify-evenly">
-        {gameStarted === true && <div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
+        {cardVisible === true && <div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
             <div className="flex gap-3">
                 Cards: 
                 <motion.div className="flex gap-3" 
@@ -159,8 +160,8 @@ useEffect(() => {
                 >
                     {cards.map((card: Card) => (
                         <motion.img src = {card.img} className="w-15 h-auto"
-                        initial={{x: -250}}
-                        animate={{x: 0}}
+                        initial={{x: -250, scale: 2}}
+                        animate={{x: 0, scale: 1 }}
                         ></motion.img> //learn framer motion and apply it here soon!
                     ))}</motion.div>
             </div>
@@ -179,7 +180,7 @@ useEffect(() => {
 
     </div>
         {gameStarted === false && betState === true? (
-            <Buttons onClick = {() => {setGameStarted(true); startGame(); setStand(false)}}>Start</Buttons>
+            <Buttons onClick = {() => {setGameStarted(true); startGame(cardVisible); setStand(false);}}>Start</Buttons>
         ) : (
             <h1></h1>
         )}
@@ -189,7 +190,11 @@ useEffect(() => {
         </div>}
     </div>
   )
-  function startGame(){
+  function startGame(cardVisible: boolean){
+    let tempcardvisiblity = cardVisible
+    tempcardvisiblity = true
+    localStorage.setItem("card-visibility", JSON.stringify(tempcardvisiblity))
+    setCardVisibility(true)
         let secondIndex = Math.floor(Math.random() * cardSelection.length)
         let firstIndex = Math.floor(Math.random() * cardSelection.length)
         setGameStarted(true)
