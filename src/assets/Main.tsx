@@ -167,7 +167,7 @@ useEffect(() => {
                         initial={{x: -250, opacity:0}}
                         animate={{x: 20, opacity: 20 }}
                         
-                        ></motion.img> //learn framer motion and apply it here soon!
+                        ></motion.img>
                     ))}</div>
             </div>
             <div>Sum: {sum} </div>
@@ -265,8 +265,6 @@ useEffect(() => {
         }
         setBotHand(botstartinghand)
         botAceChecker(botstartingsum, tempbotcounter)
-        console.log("Bot Sum: " + botstartingsum)
-        console.log("Bot Hand" + botstartinghand)
         if(botstartingsum > 21 && gameStarted === true){
             setGameStarted(false)
             Won(true)

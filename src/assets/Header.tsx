@@ -16,7 +16,6 @@ type HeaderProps = {
   setStand: (value: boolean) => void
 }
 export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, setBetAmount, gameStarted, setCardVisibility, Won, Lost, setStand}: HeaderProps){
-  console.log(betPlaced)
   const [betError, setBetError] = useState(false)
   const betInput = useRef<HTMLInputElement>(null)
   return(
