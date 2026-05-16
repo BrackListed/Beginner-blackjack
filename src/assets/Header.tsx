@@ -60,6 +60,7 @@ export function Header({betPlaced, betAmount, playerBalance, setPlayerBalance, s
       setBetError(false)
       setBetAmount(amount)
       betPlaced(true)
+      localStorage.setItem("bet-storage", JSON.stringify(amount))
       setBetAmount(amount)
     }
 
