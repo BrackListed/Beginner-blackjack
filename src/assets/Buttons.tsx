@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { easeIn, easeInOut, motion } from "motion/react"
+import {easeInOut, motion } from "motion/react"
 
 type ButtonProps = {
     children: ReactNode
@@ -14,7 +14,6 @@ export function Buttons ({children, onClick, Hit, Stand}: ButtonProps) {
         initial={{y: '-100vh', opacity: 0}}
         animate={{y: 0, opacity: 100}}
         transition={{type: "tween", duration: 0.2, ease: easeInOut}}
-        // hover:backdrop-brightness-50 hover:cursor-pointer hover:scale-110
         whileHover={{
             scale: 1.15,
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
