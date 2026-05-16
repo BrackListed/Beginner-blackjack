@@ -3,6 +3,6 @@ This is a blackjack website that was built on top of my already vanilla javascri
 ## 🌐Link to the website
 [Click me for the Website Link](https://beginner-blackjack-ykgu.vercel.app/)
 ### ℹ️Information
-Uses typescript, react, and tailwind css
+Switch branch to legacy to see the plain javascript version
 #### 📷Website Preview
 ![Website Preview](public/WebsitePreview.png)
