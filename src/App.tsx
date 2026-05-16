@@ -12,7 +12,7 @@ export default function App (){
   const [winCount, setWin] = useState(parseInt(localStorage.getItem("win-storage") ?? "0")?? 0)
   const [lossCount, setLoss] = useState(parseInt(localStorage.getItem("loss-storage") ?? "0")?? 0)
   return(
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col items-center">
       <Header 
       betAmount={betAmount}
       betPlaced={setBetState} /* // pass betPlaced as a prop to the function that sets the state */
