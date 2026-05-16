@@ -156,7 +156,7 @@ useEffect(() => {
         <div id = 'card-container' className="flex w-screen justify-evenly">
         {cardVisible === true && <motion.div id = "player-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500"
         initial={{x: -250, opacity: 0}}
-        animate = {{x: 0, opacity: 20}}
+        animate = {{x: 0, opacity: 100}}
         >
             <div className="flex gap-3">
                 Cards: 
@@ -172,12 +172,15 @@ useEffect(() => {
             <div>Sum: {sum} </div>
         </motion.div>}
         {clickedStand === true && <div id = "bot-container" className="flex flex-col mx-auto my-5 justify-between outline-none border-4 min-w-96 w-fit h-48 p-3 bg-zinc-800 border-gray-500">
-            <div className="flex gap-3">
+            <motion.div className="flex gap-3"
+            initial={{x: -250, opacity: 0}}
+            animate = {{x: 0, opacity: 100}}
+        >
                 Bot Cards: 
                 {botHand.map((botcards => (
                     <img src = {botcards.img} className="w-15 h-auto"></img>
                  )))}      
-            </div>
+            </motion.div>
 
             <div>Sum: {botSum}</div>
         </div>} 
