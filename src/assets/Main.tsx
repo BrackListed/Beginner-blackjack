@@ -111,13 +111,12 @@ useEffect(() => {
         localStorage.setItem("sum-storage", JSON.stringify(tempSum))
         }
     } else{
-        // setCard([]) 
     }
 }, [gameStarted])
 
 
 useEffect(() => {
-    if(sum > 21) {
+    if(sum > 21 && gameStarted === true) {
         setGameStarted(false)
         localStorage.setItem("game-state", JSON.stringify((false)))
         Lost(true)
@@ -129,7 +128,7 @@ useEffect(() => {
         const bustLoss = lossCount += 1
         localStorage.setItem("loss-storage", JSON.stringify(bustLoss))
         setLoss(bustLoss)
-    } else if(sum === 21){
+    } else if(sum === 21 && gameStarted === true){
         setGameStarted(false)
         Won(true)
         localStorage.setItem("game-state", JSON.stringify((false)))
@@ -247,7 +246,7 @@ useEffect(() => {
         botAceChecker(botstartingsum, tempbotcounter)
         console.log("Bot Sum: " + botstartingsum)
         console.log("Bot Hand" + botstartinghand)
-        if(botstartingsum > 21){
+        if(botstartingsum > 21 && gameStarted === true){
             setGameStarted(false)
             Won(true)
             const botBustBalance = playerBalance + (betAmount * 2)
@@ -258,7 +257,7 @@ useEffect(() => {
             const botBustWin = winCount += 1
             localStorage.setItem("win-storage", JSON.stringify(botBustWin))
             setWin(winCount)
-        } else if(botstartingsum > sum && botSum < 21){
+        } else if(botstartingsum > sum && botSum < 21 && gameStarted === true){
             setGameStarted(false)
             Lost(true)
             const standLostBalance = playerBalance - betAmount
@@ -269,7 +268,7 @@ useEffect(() => {
             const botStandLose = lossCount += 1
             localStorage.setItem("loss-storage", JSON.stringify(botStandLose))
             setLoss(botStandLose)
-        } else if(botstartingsum < sum){
+        } else if(botstartingsum < sum && gameStarted === true){
             setGameStarted(false)
             Won(true)
             const standWonBalance = playerBalance + (betAmount * 2)
@@ -280,7 +279,7 @@ useEffect(() => {
             const botStandWin = winCount += 1
             localStorage.setItem("win-storage", JSON.stringify(botStandWin))
             setWin(botStandWin)
-        } else if (botstartingsum === sum){
+        } else if (botstartingsum === sum && gameStarted === true){
             setGameStarted(false)
             Tie(true)
         }
